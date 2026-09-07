@@ -7,7 +7,7 @@
 // surfaces. Replaces the hand-written /api/v1/routes. This is the contract the
 // Flutter client and the ext servers consume.
 
-import { BlameRequest, BlameResponse, BranchesRequest, BranchesResponse, BuildRequest, BuildResponse, CloneRepoRequest, CloneRepoResponse, CompareRequest, CompareResponse, CreateBranchRequest, CreateBranchResponse, CreateRepoRequest, CreateRepoResponse, DeleteBranchRequest, DeleteBranchResponse, DeletePackageRequest, DeletePackageResponse, DeletePackageVersionRequest, DeletePackageVersionResponse, DeleteRepoRequest, DeleteRepoResponse, DeleteServiceRequest, DeleteServiceResponse, DiffRequest, DiffResponse, EnsureOrgRequest, EnsureOrgResponse, EnsureRepoRequest, EnsureRepoResponse, FileHistoryRequest, FileHistoryResponse, ForkRepoRequest, ForkRepoResponse, GetServiceRequest, GetServiceResponse, GetTaskRequest, GetTaskResponse, GraphRequest, GraphResponse, HealthRequest, HealthResponse, LaunchServiceRequest, LaunchServiceResponse, ListNamespacesRequest, ListNamespacesResponse, ListPackagesRequest, ListPackagesResponse, ListPackageTypesRequest, ListPackageTypesResponse, ListPublishSpecsRequest, ListPublishSpecsResponse, ListReposRequest, ListReposResponse, ListServicesRequest, ListServicesResponse, ListTasksRequest, ListTasksResponse, LogRequest, LogResponse, OpsStatusRequest, OpsStatusResponse, PackageVersionsRequest, PackageVersionsResponse, ReadBlobRequest, ReadBlobResponse, RebaseRequest, RebaseResponse, RevisionsRequest, RevisionsResponse, RunRequest, RunResponse, SandboxExecRequest, SandboxExecResponse, SandboxJobKillRequest, SandboxJobKillResponse, SandboxReadRequest, SandboxReadResponse, SandboxWriteRequest, SandboxWriteResponse, ScaleServiceRequest, ScaleServiceResponse, SearchRequest, SearchResponse, StatusRequest, StatusResponse, SyncRequest, SyncResponse, TagsRequest, TagsResponse, TaskLogRequest, TaskLogResponse, TreeRequest, TreeResponse, WriteBlobRequest, WriteBlobResponse } from "./easylab_pb.js";
+import { BlameRequest, BlameResponse, BranchesRequest, BranchesResponse, BuildRequest, BuildResponse, CloneRepoRequest, CloneRepoResponse, CompareRequest, CompareResponse, CreateBranchRequest, CreateBranchResponse, CreateRepoRequest, CreateRepoResponse, DeleteBranchRequest, DeleteBranchResponse, DeletePackageRequest, DeletePackageResponse, DeletePackageVersionRequest, DeletePackageVersionResponse, DeleteRepoRequest, DeleteRepoResponse, DeleteServiceRequest, DeleteServiceResponse, DiffRequest, DiffResponse, EnsureOrgRequest, EnsureOrgResponse, EnsureRepoRequest, EnsureRepoResponse, FileHistoryRequest, FileHistoryResponse, ForkRepoRequest, ForkRepoResponse, GetServiceRequest, GetServiceResponse, GetTaskRequest, GetTaskResponse, GraphRequest, GraphResponse, HealthRequest, HealthResponse, LaunchServiceRequest, LaunchServiceResponse, ListNamespacesRequest, ListNamespacesResponse, ListPackagesRequest, ListPackagesResponse, ListPackageTypesRequest, ListPackageTypesResponse, ListPublishSpecsRequest, ListPublishSpecsResponse, ListReposRequest, ListReposResponse, ListServicesRequest, ListServicesResponse, ListTasksRequest, ListTasksResponse, LogRequest, LogResponse, OpsStatusRequest, OpsStatusResponse, PackageVersionsRequest, PackageVersionsResponse, ReadBlobRequest, ReadBlobResponse, RebaseRequest, RebaseResponse, RevisionsRequest, RevisionsResponse, SandboxExecRequest, SandboxExecResponse, SandboxJobKillRequest, SandboxJobKillResponse, SandboxReadRequest, SandboxReadResponse, SandboxWriteRequest, SandboxWriteResponse, ScaleServiceRequest, ScaleServiceResponse, SearchRequest, SearchResponse, StatusRequest, StatusResponse, SyncRequest, SyncResponse, TagsRequest, TagsResponse, TaskLogRequest, TaskLogResponse, TreeRequest, TreeResponse, WriteBlobRequest, WriteBlobResponse } from "./easylab_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -378,15 +378,6 @@ export const OpsService = {
       name: "Build",
       I: BuildRequest,
       O: BuildResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc easylab.v1.OpsService.Run
-     */
-    run: {
-      name: "Run",
-      I: RunRequest,
-      O: RunResponse,
       kind: MethodKind.Unary,
     },
     /**
