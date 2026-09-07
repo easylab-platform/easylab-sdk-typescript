@@ -1,5 +1,5 @@
 {
-  "name": "@easylab/client-sdk",
+  "name": "@easylab/sdk",
   "version": "0.1.1",
   "description": "EasyLab typed client SDK for TypeScript (Connect: easylab.v1 + agent.v1 via the easylab gateway).",
   "type": "module",
