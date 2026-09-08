@@ -1,6 +1,6 @@
 {
   "name": "@easylab/sdk",
-  "version": "0.1.1",
+  "version": "0.3.0",
   "description": "EasyLab typed client SDK for TypeScript (Connect: easylab.v1 + agent.v1 via the easylab gateway).",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,6 +9,14 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./web": {
+      "types": "./dist/web.d.ts",
+      "default": "./dist/web.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "node": "./dist/node.js"
     },
     "./agent": {
       "types": "./dist/agent.d.ts",
@@ -30,7 +38,8 @@
   "dependencies": {
     "@bufbuild/protobuf": "^2.14.1",
     "@connectrpc/connect": "^2.2.0",
-    "@connectrpc/connect-web": "^2.2.0"
+    "@connectrpc/connect-web": "^2.2.0",
+    "@connectrpc/connect-node": "^2.2.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3"
