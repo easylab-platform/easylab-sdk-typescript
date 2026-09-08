@@ -48,17 +48,16 @@ function authInterceptors(options: NodeTransportOptions): Interceptor[] {
 /** Options for the gateway transport (TLS to the easylab gateway). */
 export interface GatewayOptions extends NodeTransportOptions {
   /**
-   * HTTP version for the gateway connection. Defaults to "2" for https://
-   * (ALPN) and "1.1" for http://.
+   * HTTP version for the gateway connection. Defaults to "2" — cleartext
+   * prior-knowledge (h2c) for http://, ALPN for https://. The gateway's
+   * Connect surface is HTTP/2-only; pass "1.1" only for legacy endpoints.
    */
   httpVersion?: '1.1' | '2'
 }
 
 /** Build a Node transport for the easylab gateway (TLS, pooled sessions). */
 export function createGatewayTransport(options: GatewayOptions): Transport {
-  const httpVersion =
-    options.httpVersion ??
-    (options.baseUrl.startsWith('https://') ? '2' : '1.1')
+  const httpVersion = options.httpVersion ?? '2'
   return createConnectTransport({
     baseUrl: options.baseUrl.replace(/\/+$/, ''),
     httpVersion,
