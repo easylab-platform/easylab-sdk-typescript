@@ -7,7 +7,7 @@
 // surface under /api/v1). The single source of truth for the agent contract.
 // Server: agent (TypeScript). Clients: easylab gateway, ext servers, Flutter.
 
-import { CompactRequest, CompactResponse, CreateSessionRequest, CreateSessionResponse, DecideWorksheetRequest, DecideWorksheetResponse, DeletePresetRequest, DeletePresetResponse, DeleteProviderRequest, DeleteProviderResponse, DeleteSessionRequest, DeleteSessionResponse, ForkRequest, ForkResponse, GetAgentConfigRequest, GetAgentConfigResponse, GetConfigRequest, GetConfigResponse, GetFileMetaRequest, GetFileMetaResponse, GetFileRequest, GetFileResponse, GetSessionRequest, GetSessionResponse, GetToolConfigRequest, GetToolConfigResponse, HealthRequest, HealthResponse, IngestFileRequest, IngestFileResponse, InterruptRequest, InterruptResponse, ListMessagesRequest, ListMessagesResponse, ListModelsRequest, ListModelsResponse, ListPresetsRequest, ListPresetsResponse, ListProvidersCatalogRequest, ListProvidersCatalogResponse, ListProvidersRequest, ListProvidersResponse, ListSessionsRequest, ListSessionsResponse, ListToolsRequest, ListToolsResponse, ListWorksheetsRequest, ListWorksheetsResponse, MailboxRequest, MailboxResponse, PreviewPresetRequest, PreviewPresetResponse, PromptRequest, PromptResponse, RegisterProviderRequest, RegisterProviderResponse, RenameRequest, RenameResponse, SetConfigRequest, SetConfigResponse, SetExtensionConfigRequest, SetExtensionConfigResponse, SetModelRequest, SetModelResponse, SetToolConfigRequest, SetToolConfigResponse, StateRequest, StateResponse, TestProviderRequest, TestProviderResponse, UndoRequest, UndoResponse, UpdateSettingsRequest, UpdateSettingsResponse, UploadFileRequest, UploadFileResponse, UpsertPresetRequest, UpsertPresetResponse, WatchSessionRequest, WatchSessionResponse } from "./agent_pb.js";
+import { CompactRequest, CompactResponse, CreateSessionRequest, CreateSessionResponse, DeletePresetRequest, DeletePresetResponse, DeleteProviderRequest, DeleteProviderResponse, DeleteSessionRequest, DeleteSessionResponse, ForkRequest, ForkResponse, GetAgentConfigRequest, GetAgentConfigResponse, GetConfigRequest, GetConfigResponse, GetFileMetaRequest, GetFileMetaResponse, GetFileRequest, GetFileResponse, GetSessionRequest, GetSessionResponse, GetToolConfigRequest, GetToolConfigResponse, HealthRequest, HealthResponse, IngestFileRequest, IngestFileResponse, InterruptRequest, InterruptResponse, ListMessagesRequest, ListMessagesResponse, ListModelsRequest, ListModelsResponse, ListPresetsRequest, ListPresetsResponse, ListProvidersCatalogRequest, ListProvidersCatalogResponse, ListProvidersRequest, ListProvidersResponse, ListSessionsRequest, ListSessionsResponse, ListToolsRequest, ListToolsResponse, MailboxRequest, MailboxResponse, PreviewPresetRequest, PreviewPresetResponse, PromptRequest, PromptResponse, RegisterProviderRequest, RegisterProviderResponse, RenameRequest, RenameResponse, SetConfigRequest, SetConfigResponse, SetExtensionConfigRequest, SetExtensionConfigResponse, SetModelRequest, SetModelResponse, SetToolConfigRequest, SetToolConfigResponse, StateRequest, StateResponse, TestProviderRequest, TestProviderResponse, UndoRequest, UndoResponse, UpdateSettingsRequest, UpdateSettingsResponse, UploadFileRequest, UploadFileResponse, UpsertPresetRequest, UpsertPresetResponse, WatchSessionRequest, WatchSessionResponse } from "./agent_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -349,24 +349,6 @@ export const AgentService = {
       name: "GetFileMeta",
       I: GetFileMetaRequest,
       O: GetFileMetaResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc agent.v1.AgentService.ListWorksheets
-     */
-    listWorksheets: {
-      name: "ListWorksheets",
-      I: ListWorksheetsRequest,
-      O: ListWorksheetsResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * @generated from rpc agent.v1.AgentService.DecideWorksheet
-     */
-    decideWorksheet: {
-      name: "DecideWorksheet",
-      I: DecideWorksheetRequest,
-      O: DecideWorksheetResponse,
       kind: MethodKind.Unary,
     },
     /**
