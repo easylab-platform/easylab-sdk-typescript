@@ -7,7 +7,7 @@
 // surfaces. Replaces the hand-written /api/v1/routes. This is the contract the
 // Flutter client and the ext servers consume.
 
-import { BlameRequest, BlameResponse, BranchesRequest, BranchesResponse, BuildRequest, BuildResponse, CloneRepoRequest, CloneRepoResponse, CompareRequest, CompareResponse, CreateBranchRequest, CreateBranchResponse, CreateRepoRequest, CreateRepoResponse, DeleteBranchRequest, DeleteBranchResponse, DeletePackageRequest, DeletePackageResponse, DeletePackageVersionRequest, DeletePackageVersionResponse, DeleteRepoRequest, DeleteRepoResponse, DeleteServiceRequest, DeleteServiceResponse, DiffRequest, DiffResponse, EnsureOrgRequest, EnsureOrgResponse, EnsureRepoRequest, EnsureRepoResponse, FileHistoryRequest, FileHistoryResponse, ForkRepoRequest, ForkRepoResponse, GetServiceRequest, GetServiceResponse, GetTaskRequest, GetTaskResponse, GraphRequest, GraphResponse, HealthRequest, HealthResponse, LaunchServiceRequest, LaunchServiceResponse, ListNamespacesRequest, ListNamespacesResponse, ListPackagesRequest, ListPackagesResponse, ListPackageTypesRequest, ListPackageTypesResponse, ListPublishSpecsRequest, ListPublishSpecsResponse, ListReposRequest, ListReposResponse, ListServicesRequest, ListServicesResponse, ListTasksRequest, ListTasksResponse, LogRequest, LogResponse, OpsStatusRequest, OpsStatusResponse, PackageVersionsRequest, PackageVersionsResponse, ReadBlobRequest, ReadBlobResponse, RebaseRequest, RebaseResponse, RevisionsRequest, RevisionsResponse, SandboxExecRequest, SandboxExecResponse, SandboxJobKillRequest, SandboxJobKillResponse, SandboxReadRequest, SandboxReadResponse, SandboxWriteRequest, SandboxWriteResponse, ScaleServiceRequest, ScaleServiceResponse, SearchRequest, SearchResponse, StatusRequest, StatusResponse, SyncRequest, SyncResponse, TagsRequest, TagsResponse, TaskLogRequest, TaskLogResponse, TreeRequest, TreeResponse, WriteBlobRequest, WriteBlobResponse } from "./easylab_pb.js";
+import { ArchiveRequest, ArchiveResponse, BlameRequest, BlameResponse, BranchesRequest, BranchesResponse, BuildRequest, BuildResponse, CloneRepoRequest, CloneRepoResponse, CompareRequest, CompareResponse, CreateBranchRequest, CreateBranchResponse, CreateRepoRequest, CreateRepoResponse, DeleteBranchRequest, DeleteBranchResponse, DeleteMirrorRequest, DeleteMirrorResponse, DeleteOrgRequest, DeleteOrgResponse, DeletePackageRequest, DeletePackageResponse, DeletePackageVersionRequest, DeletePackageVersionResponse, DeleteRepoRequest, DeleteRepoResponse, DeleteServiceRequest, DeleteServiceResponse, DiffRequest, DiffResponse, DownloadReleaseAssetRequest, DownloadReleaseAssetResponse, EnsureOrgRequest, EnsureOrgResponse, EnsureRepoRequest, EnsureRepoResponse, FileHistoryRequest, FileHistoryResponse, ForkRepoRequest, ForkRepoResponse, GetMirrorRequest, GetMirrorResponse, GetServiceRequest, GetServiceResponse, GetTaskRequest, GetTaskResponse, GraphRequest, GraphResponse, HealthRequest, HealthResponse, LaunchServiceRequest, LaunchServiceResponse, ListNamespacesRequest, ListNamespacesResponse, ListPackagesRequest, ListPackagesResponse, ListPackageTypesRequest, ListPackageTypesResponse, ListPublishSpecsRequest, ListPublishSpecsResponse, ListReleasesRequest, ListReleasesResponse, ListReposRequest, ListReposResponse, ListServicesRequest, ListServicesResponse, ListTasksRequest, ListTasksResponse, LogRequest, LogResponse, OCICatalogRequest, OCICatalogResponse, OpsStatusRequest, OpsStatusResponse, PackageVersionsRequest, PackageVersionsResponse, ReadBlobRequest, ReadBlobResponse, RebaseRequest, RebaseResponse, RevisionsRequest, RevisionsResponse, SandboxExecRequest, SandboxExecResponse, SandboxJobKillRequest, SandboxJobKillResponse, SandboxReadRequest, SandboxReadResponse, SandboxWriteRequest, SandboxWriteResponse, ScaleServiceRequest, ScaleServiceResponse, SearchRequest, SearchResponse, SetMirrorRequest, SetMirrorResponse, StatusRequest, StatusResponse, SyncMirrorRequest, SyncMirrorResponse, SyncRequest, SyncResponse, TagsRequest, TagsResponse, TaskLogRequest, TaskLogResponse, TreeRequest, TreeResponse, WriteBlobRequest, WriteBlobResponse } from "./easylab_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -243,6 +243,86 @@ export const LabService = {
       O: RebaseResponse,
       kind: MethodKind.Unary,
     },
+    /**
+     * ---- Lab additions (REST removals) ----
+     *
+     * @generated from rpc easylab.v1.LabService.DeleteOrg
+     */
+    deleteOrg: {
+      name: "DeleteOrg",
+      I: DeleteOrgRequest,
+      O: DeleteOrgResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * Releases (backed by the generic artifact registry; format "generic").
+     *
+     * @generated from rpc easylab.v1.LabService.ListReleases
+     */
+    listReleases: {
+      name: "ListReleases",
+      I: ListReleasesRequest,
+      O: ListReleasesResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.LabService.DownloadReleaseAsset
+     */
+    downloadReleaseAsset: {
+      name: "DownloadReleaseAsset",
+      I: DownloadReleaseAssetRequest,
+      O: DownloadReleaseAssetResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * Source archive tarball for a rev/tag.
+     *
+     * @generated from rpc easylab.v1.LabService.Archive
+     */
+    archive: {
+      name: "Archive",
+      I: ArchiveRequest,
+      O: ArchiveResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * Mirror (persistent push/pull mirrors on a repo).
+     *
+     * @generated from rpc easylab.v1.LabService.GetMirror
+     */
+    getMirror: {
+      name: "GetMirror",
+      I: GetMirrorRequest,
+      O: GetMirrorResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.LabService.SetMirror
+     */
+    setMirror: {
+      name: "SetMirror",
+      I: SetMirrorRequest,
+      O: SetMirrorResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.LabService.DeleteMirror
+     */
+    deleteMirror: {
+      name: "DeleteMirror",
+      I: DeleteMirrorRequest,
+      O: DeleteMirrorResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.LabService.SyncMirror
+     */
+    syncMirror: {
+      name: "SyncMirror",
+      I: SyncMirrorRequest,
+      O: SyncMirrorResponse,
+      kind: MethodKind.Unary,
+    },
   }
 } as const;
 
@@ -461,6 +541,15 @@ export const RegistryService = {
       name: "ListPublishSpecs",
       I: ListPublishSpecsRequest,
       O: ListPublishSpecsResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.RegistryService.OCICatalog
+     */
+    oCICatalog: {
+      name: "OCICatalog",
+      I: OCICatalogRequest,
+      O: OCICatalogResponse,
       kind: MethodKind.Unary,
     },
   }

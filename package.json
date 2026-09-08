@@ -1,6 +1,6 @@
 {
   "name": "@easylab/sdk",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "EasyLab typed client SDK for TypeScript (Connect: easylab.v1 + agent.v1 via the easylab gateway).",
   "type": "module",
   "main": "./dist/index.js",
