@@ -1,11 +1,14 @@
 // Node transport factories for in-cluster callers.
 //
 // Two flavors, mirroring the Go agentsdk:
-// - createGatewayTransport: the easylab gateway over TLS (HTTP/2 via ALPN,
-//   HTTP/1.1 for plain http://), with connection-pooling sessions.
+// - createGatewayTransport: the easylab gateway over HTTP/2 — cleartext
+//   prior-knowledge (h2c) for http:// URLs, ALPN for https:// .
 // - createAgentTransport / createAgentClient: DIRECT agent calls over
-//   cleartext HTTP/2 (h2c prior knowledge). The agent serves HTTP/2 only,
-//   so this is the one transport that can talk to it.
+//   cleartext HTTP/2 (h2c prior knowledge). The agent serves HTTP/2 only.
+//
+// This SDK speaks HTTP/2 exclusively: the URL scheme decides TLS vs
+// cleartext (https:// => h2 over TLS, http:// => h2c). HTTP/1.1 is not
+// supported — the easylab gateway and agent both serve HTTP/2 only.
 //
 // This entry is Node-only (resolvable under the "node" exports condition);
 // bundlers exclude it from browser builds, keeping `node:http2` out of the
@@ -45,22 +48,14 @@ function authInterceptors(options: NodeTransportOptions): Interceptor[] {
   return [auth]
 }
 
-/** Options for the gateway transport (TLS to the easylab gateway). */
-export interface GatewayOptions extends NodeTransportOptions {
-  /**
-   * HTTP version for the gateway connection. Defaults to "2" — cleartext
-   * prior-knowledge (h2c) for http://, ALPN for https://. The gateway's
-   * Connect surface is HTTP/2-only; pass "1.1" only for legacy endpoints.
-   */
-  httpVersion?: '1.1' | '2'
-}
+/** Options for the gateway transport (HTTP/2 to the easylab gateway). */
+export interface GatewayOptions extends NodeTransportOptions {}
 
-/** Build a Node transport for the easylab gateway (TLS, pooled sessions). */
+/** Build a Node transport for the easylab gateway over HTTP/2. */
 export function createGatewayTransport(options: GatewayOptions): Transport {
-  const httpVersion = options.httpVersion ?? '2'
   return createConnectTransport({
     baseUrl: options.baseUrl.replace(/\/+$/, ''),
-    httpVersion,
+    httpVersion: '2',
     interceptors: authInterceptors(options),
     ...(options.keepAliveTimeoutMs !== undefined
       ? { keepAliveTimeoutMs: options.keepAliveTimeoutMs }
@@ -69,19 +64,13 @@ export function createGatewayTransport(options: GatewayOptions): Transport {
 }
 
 /** Options for the direct-agent transport (h2c to the agent backend). */
-export interface AgentOptions extends NodeTransportOptions {
-  /**
-   * Force a specific HTTP version. The agent serves HTTP/2 only, so the
-   * default (and recommended) is "2" = cleartext HTTP/2 prior knowledge.
-   */
-  httpVersion?: '1.1' | '2'
-}
+export interface AgentOptions extends NodeTransportOptions {}
 
 /** Build the DIRECT agent transport: cleartext HTTP/2 (h2c prior knowledge). */
 export function createAgentTransport(options: AgentOptions): Transport {
   return createConnectTransport({
     baseUrl: options.baseUrl.replace(/\/+$/, ''),
-    httpVersion: options.httpVersion ?? '2',
+    httpVersion: '2',
     interceptors: authInterceptors(options),
     ...(options.keepAliveTimeoutMs !== undefined
       ? { keepAliveTimeoutMs: options.keepAliveTimeoutMs }
