@@ -1,4 +1,5 @@
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { ExecuteRequest as ExecuteRequest$1, ExecuteResponseSchema, FileListRequest as FileListRequest$1, FileListResponseSchema, FileReadRequest as FileReadRequest$1, FileReadResponseSchema, FileWriteRequest as FileWriteRequest$1, FileWriteResponseSchema, JobKillRequest as JobKillRequest$1, JobKillResponseSchema, JobOutputRequest as JobOutputRequest$1, JobOutputResponseSchema, JobStdinRequest as JobStdinRequest$1, JobStdinResponseSchema, JobWaitRequest as JobWaitRequest$1, JobWaitResponseSchema, ListJobsResponseSchema, WatchJobRequest as WatchJobRequest$1, WatchJobResponseSchema } from "../../worker/v1/worker_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file easylab/v1/easylab.proto.
@@ -2876,6 +2877,505 @@ export type OCICatalogResponse = Message<"easylab.v1.OCICatalogResponse"> & {
  */
 export declare const OCICatalogResponseSchema: GenMessage<OCICatalogResponse>;
 /**
+ * @generated from message easylab.v1.SandboxInfo
+ */
+export type SandboxInfo = Message<"easylab.v1.SandboxInfo"> & {
+    /**
+     * container/service name (session key or standalone)
+     *
+     * @generated from field: string name = 1;
+     */
+    name: string;
+    /**
+     * association: '' org = standalone sandbox (no sync)
+     *
+     * @generated from field: string org = 2;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 3;
+     */
+    repo: string;
+    /**
+     * @generated from field: string branch = 4;
+     */
+    branch: string;
+    /**
+     * e.g. docker.io/library/golang:1.26
+     *
+     * @generated from field: string base_image = 5;
+     */
+    baseImage: string;
+    /**
+     * injected-worker image tag
+     *
+     * @generated from field: string derived_image = 6;
+     */
+    derivedImage: string;
+    /**
+     * default /workspace ('/tmp' for nonroot bases)
+     *
+     * @generated from field: string workspace = 7;
+     */
+    workspace: string;
+    /**
+     * live podman phase (Running/Pending/Exited/gone)
+     *
+     * @generated from field: string phase = 8;
+     */
+    phase: string;
+    /**
+     * @generated from field: string pod_ip = 9;
+     */
+    podIp: string;
+    /**
+     * live worker boot id (changed = worker restarted)
+     *
+     * @generated from field: string boot_id = 10;
+     */
+    bootId: string;
+    /**
+     * @generated from field: int32 running_jobs = 11;
+     */
+    runningJobs: number;
+    /**
+     * worker window (24h retention)
+     *
+     * @generated from field: int32 total_jobs = 12;
+     */
+    totalJobs: number;
+    /**
+     * easylab rev-coherence metadata
+     *
+     * @generated from field: string synced_rev = 13;
+     */
+    syncedRev: string;
+    /**
+     * @generated from field: string synced_boot_id = 14;
+     */
+    syncedBootId: string;
+    /**
+     * aggregation note (worker unreachable etc.)
+     *
+     * @generated from field: string error = 15;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.SandboxInfo.
+ * Use `create(SandboxInfoSchema)` to create a new message.
+ */
+export declare const SandboxInfoSchema: GenMessage<SandboxInfo>;
+/**
+ * @generated from message easylab.v1.ListSandboxesRequest
+ */
+export type ListSandboxesRequest = Message<"easylab.v1.ListSandboxesRequest"> & {};
+/**
+ * Describes the message easylab.v1.ListSandboxesRequest.
+ * Use `create(ListSandboxesRequestSchema)` to create a new message.
+ */
+export declare const ListSandboxesRequestSchema: GenMessage<ListSandboxesRequest>;
+/**
+ * @generated from message easylab.v1.ListSandboxesResponse
+ */
+export type ListSandboxesResponse = Message<"easylab.v1.ListSandboxesResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.SandboxInfo sandboxes = 1;
+     */
+    sandboxes: SandboxInfo[];
+};
+/**
+ * Describes the message easylab.v1.ListSandboxesResponse.
+ * Use `create(ListSandboxesResponseSchema)` to create a new message.
+ */
+export declare const ListSandboxesResponseSchema: GenMessage<ListSandboxesResponse>;
+/**
+ * @generated from message easylab.v1.GetSandboxRequest
+ */
+export type GetSandboxRequest = Message<"easylab.v1.GetSandboxRequest"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+};
+/**
+ * Describes the message easylab.v1.GetSandboxRequest.
+ * Use `create(GetSandboxRequestSchema)` to create a new message.
+ */
+export declare const GetSandboxRequestSchema: GenMessage<GetSandboxRequest>;
+/**
+ * @generated from message easylab.v1.GetSandboxResponse
+ */
+export type GetSandboxResponse = Message<"easylab.v1.GetSandboxResponse"> & {
+    /**
+     * @generated from field: easylab.v1.SandboxInfo sandbox = 1;
+     */
+    sandbox?: SandboxInfo | undefined;
+};
+/**
+ * Describes the message easylab.v1.GetSandboxResponse.
+ * Use `create(GetSandboxResponseSchema)` to create a new message.
+ */
+export declare const GetSandboxResponseSchema: GenMessage<GetSandboxResponse>;
+/**
+ * @generated from message easylab.v1.EnsureSandboxImageRequest
+ */
+export type EnsureSandboxImageRequest = Message<"easylab.v1.EnsureSandboxImageRequest"> & {
+    /**
+     * @generated from field: string base_image = 1;
+     */
+    baseImage: string;
+};
+/**
+ * Describes the message easylab.v1.EnsureSandboxImageRequest.
+ * Use `create(EnsureSandboxImageRequestSchema)` to create a new message.
+ */
+export declare const EnsureSandboxImageRequestSchema: GenMessage<EnsureSandboxImageRequest>;
+/**
+ * @generated from message easylab.v1.EnsureSandboxImageResponse
+ */
+export type EnsureSandboxImageResponse = Message<"easylab.v1.EnsureSandboxImageResponse"> & {
+    /**
+     * @generated from field: string derived_image = 1;
+     */
+    derivedImage: string;
+    /**
+     * false = cache hit
+     *
+     * @generated from field: bool built = 2;
+     */
+    built: boolean;
+};
+/**
+ * Describes the message easylab.v1.EnsureSandboxImageResponse.
+ * Use `create(EnsureSandboxImageResponseSchema)` to create a new message.
+ */
+export declare const EnsureSandboxImageResponseSchema: GenMessage<EnsureSandboxImageResponse>;
+/**
+ * @generated from message easylab.v1.LaunchSandboxRequest
+ */
+export type LaunchSandboxRequest = Message<"easylab.v1.LaunchSandboxRequest"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+    /**
+     * @generated from field: string base_image = 2;
+     */
+    baseImage: string;
+    /**
+     * '' = standalone (independent sandbox, never synced)
+     *
+     * @generated from field: string org = 3;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 4;
+     */
+    repo: string;
+    /**
+     * @generated from field: string branch = 5;
+     */
+    branch: string;
+    /**
+     * default /workspace
+     *
+     * @generated from field: string workspace = 6;
+     */
+    workspace: string;
+    /**
+     * @generated from field: map<string, string> env = 7;
+     */
+    env: {
+        [key: string]: string;
+    };
+    /**
+     * @generated from field: string cpus = 8;
+     */
+    cpus: string;
+    /**
+     * @generated from field: uint64 memory_bytes = 9;
+     */
+    memoryBytes: bigint;
+};
+/**
+ * Describes the message easylab.v1.LaunchSandboxRequest.
+ * Use `create(LaunchSandboxRequestSchema)` to create a new message.
+ */
+export declare const LaunchSandboxRequestSchema: GenMessage<LaunchSandboxRequest>;
+/**
+ * @generated from message easylab.v1.LaunchSandboxResponse
+ */
+export type LaunchSandboxResponse = Message<"easylab.v1.LaunchSandboxResponse"> & {
+    /**
+     * @generated from field: easylab.v1.SandboxInfo sandbox = 1;
+     */
+    sandbox?: SandboxInfo | undefined;
+};
+/**
+ * Describes the message easylab.v1.LaunchSandboxResponse.
+ * Use `create(LaunchSandboxResponseSchema)` to create a new message.
+ */
+export declare const LaunchSandboxResponseSchema: GenMessage<LaunchSandboxResponse>;
+/**
+ * @generated from message easylab.v1.DeleteSandboxRequest
+ */
+export type DeleteSandboxRequest = Message<"easylab.v1.DeleteSandboxRequest"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteSandboxRequest.
+ * Use `create(DeleteSandboxRequestSchema)` to create a new message.
+ */
+export declare const DeleteSandboxRequestSchema: GenMessage<DeleteSandboxRequest>;
+/**
+ * @generated from message easylab.v1.DeleteSandboxResponse
+ */
+export type DeleteSandboxResponse = Message<"easylab.v1.DeleteSandboxResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteSandboxResponse.
+ * Use `create(DeleteSandboxResponseSchema)` to create a new message.
+ */
+export declare const DeleteSandboxResponseSchema: GenMessage<DeleteSandboxResponse>;
+/**
+ * @generated from message easylab.v1.ExecuteRequest
+ */
+export type ExecuteRequest = Message<"easylab.v1.ExecuteRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.ExecuteRequest req = 2;
+     */
+    req?: ExecuteRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.ExecuteRequest.
+ * Use `create(ExecuteRequestSchema)` to create a new message.
+ */
+export declare const ExecuteRequestSchema: GenMessage<ExecuteRequest>;
+/**
+ * @generated from message easylab.v1.ListJobsRequest
+ */
+export type ListJobsRequest = Message<"easylab.v1.ListJobsRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: int32 limit = 2;
+     */
+    limit: number;
+};
+/**
+ * Describes the message easylab.v1.ListJobsRequest.
+ * Use `create(ListJobsRequestSchema)` to create a new message.
+ */
+export declare const ListJobsRequestSchema: GenMessage<ListJobsRequest>;
+/**
+ * @generated from message easylab.v1.JobOutputRequest
+ */
+export type JobOutputRequest = Message<"easylab.v1.JobOutputRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.JobOutputRequest req = 2;
+     */
+    req?: JobOutputRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.JobOutputRequest.
+ * Use `create(JobOutputRequestSchema)` to create a new message.
+ */
+export declare const JobOutputRequestSchema: GenMessage<JobOutputRequest>;
+/**
+ * @generated from message easylab.v1.WatchJobRequest
+ */
+export type WatchJobRequest = Message<"easylab.v1.WatchJobRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.WatchJobRequest req = 2;
+     */
+    req?: WatchJobRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.WatchJobRequest.
+ * Use `create(WatchJobRequestSchema)` to create a new message.
+ */
+export declare const WatchJobRequestSchema: GenMessage<WatchJobRequest>;
+/**
+ * @generated from message easylab.v1.JobWaitRequest
+ */
+export type JobWaitRequest = Message<"easylab.v1.JobWaitRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.JobWaitRequest req = 2;
+     */
+    req?: JobWaitRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.JobWaitRequest.
+ * Use `create(JobWaitRequestSchema)` to create a new message.
+ */
+export declare const JobWaitRequestSchema: GenMessage<JobWaitRequest>;
+/**
+ * @generated from message easylab.v1.JobStdinRequest
+ */
+export type JobStdinRequest = Message<"easylab.v1.JobStdinRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.JobStdinRequest req = 2;
+     */
+    req?: JobStdinRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.JobStdinRequest.
+ * Use `create(JobStdinRequestSchema)` to create a new message.
+ */
+export declare const JobStdinRequestSchema: GenMessage<JobStdinRequest>;
+/**
+ * @generated from message easylab.v1.JobKillRequest
+ */
+export type JobKillRequest = Message<"easylab.v1.JobKillRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.JobKillRequest req = 2;
+     */
+    req?: JobKillRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.JobKillRequest.
+ * Use `create(JobKillRequestSchema)` to create a new message.
+ */
+export declare const JobKillRequestSchema: GenMessage<JobKillRequest>;
+/**
+ * @generated from message easylab.v1.FileReadRequest
+ */
+export type FileReadRequest = Message<"easylab.v1.FileReadRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.FileReadRequest req = 2;
+     */
+    req?: FileReadRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.FileReadRequest.
+ * Use `create(FileReadRequestSchema)` to create a new message.
+ */
+export declare const FileReadRequestSchema: GenMessage<FileReadRequest>;
+/**
+ * @generated from message easylab.v1.SyncWorkspaceRequest
+ */
+export type SyncWorkspaceRequest = Message<"easylab.v1.SyncWorkspaceRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: string org = 2;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 3;
+     */
+    repo: string;
+    /**
+     * branch head commit to push
+     *
+     * @generated from field: string rev = 4;
+     */
+    rev: string;
+    /**
+     * @generated from field: string branch = 5;
+     */
+    branch: string;
+};
+/**
+ * Describes the message easylab.v1.SyncWorkspaceRequest.
+ * Use `create(SyncWorkspaceRequestSchema)` to create a new message.
+ */
+export declare const SyncWorkspaceRequestSchema: GenMessage<SyncWorkspaceRequest>;
+/**
+ * @generated from message easylab.v1.SyncWorkspaceResponse
+ */
+export type SyncWorkspaceResponse = Message<"easylab.v1.SyncWorkspaceResponse"> & {
+    /**
+     * @generated from field: string synced_rev = 1;
+     */
+    syncedRev: string;
+};
+/**
+ * Describes the message easylab.v1.SyncWorkspaceResponse.
+ * Use `create(SyncWorkspaceResponseSchema)` to create a new message.
+ */
+export declare const SyncWorkspaceResponseSchema: GenMessage<SyncWorkspaceResponse>;
+/**
+ * @generated from message easylab.v1.FileWriteRequest
+ */
+export type FileWriteRequest = Message<"easylab.v1.FileWriteRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.FileWriteRequest req = 2;
+     */
+    req?: FileWriteRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.FileWriteRequest.
+ * Use `create(FileWriteRequestSchema)` to create a new message.
+ */
+export declare const FileWriteRequestSchema: GenMessage<FileWriteRequest>;
+/**
+ * @generated from message easylab.v1.FileListRequest
+ */
+export type FileListRequest = Message<"easylab.v1.FileListRequest"> & {
+    /**
+     * @generated from field: string sandbox = 1;
+     */
+    sandbox: string;
+    /**
+     * @generated from field: worker.v1.FileListRequest req = 2;
+     */
+    req?: FileListRequest$1 | undefined;
+};
+/**
+ * Describes the message easylab.v1.FileListRequest.
+ * Use `create(FileListRequestSchema)` to create a new message.
+ */
+export declare const FileListRequestSchema: GenMessage<FileListRequest>;
+/**
  * @generated from enum easylab.v1.ServiceKind
  */
 export declare enum ServiceKind {
@@ -3373,3 +3873,147 @@ export declare const RegistryService: GenService<{
         output: typeof OCICatalogResponseSchema;
     };
 }>;
+/**
+ * SandboxService fronts every worker.v1 API for the UI/console and owns the
+ * sandbox lifecycle (derived image + launch + sync + registry table).
+ *
+ * @generated from service easylab.v1.SandboxService
+ */
+export declare const SandboxService: GenService<{
+    /**
+     * lifecycle
+     *
+     * @generated from rpc easylab.v1.SandboxService.ListSandboxes
+     */
+    listSandboxes: {
+        methodKind: "unary";
+        input: typeof ListSandboxesRequestSchema;
+        output: typeof ListSandboxesResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.GetSandbox
+     */
+    getSandbox: {
+        methodKind: "unary";
+        input: typeof GetSandboxRequestSchema;
+        output: typeof GetSandboxResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.EnsureSandboxImage
+     */
+    ensureSandboxImage: {
+        methodKind: "unary";
+        input: typeof EnsureSandboxImageRequestSchema;
+        output: typeof EnsureSandboxImageResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.LaunchSandbox
+     */
+    launchSandbox: {
+        methodKind: "unary";
+        input: typeof LaunchSandboxRequestSchema;
+        output: typeof LaunchSandboxResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.DeleteSandbox
+     */
+    deleteSandbox: {
+        methodKind: "unary";
+        input: typeof DeleteSandboxRequestSchema;
+        output: typeof DeleteSandboxResponseSchema;
+    };
+    /**
+     * worker passthroughs (sandbox routing + worker.v1 payloads)
+     *
+     * @generated from rpc easylab.v1.SandboxService.Execute
+     */
+    execute: {
+        methodKind: "unary";
+        input: typeof ExecuteRequestSchema;
+        output: typeof ExecuteResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.ListJobs
+     */
+    listJobs: {
+        methodKind: "unary";
+        input: typeof ListJobsRequestSchema;
+        output: typeof ListJobsResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobOutput
+     */
+    jobOutput: {
+        methodKind: "unary";
+        input: typeof JobOutputRequestSchema;
+        output: typeof JobOutputResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.WatchJob
+     */
+    watchJob: {
+        methodKind: "server_streaming";
+        input: typeof WatchJobRequestSchema;
+        output: typeof WatchJobResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobWait
+     */
+    jobWait: {
+        methodKind: "unary";
+        input: typeof JobWaitRequestSchema;
+        output: typeof JobWaitResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobStdin
+     */
+    jobStdin: {
+        methodKind: "unary";
+        input: typeof JobStdinRequestSchema;
+        output: typeof JobStdinResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobKill
+     */
+    jobKill: {
+        methodKind: "unary";
+        input: typeof JobKillRequestSchema;
+        output: typeof JobKillResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.FileRead
+     */
+    fileRead: {
+        methodKind: "unary";
+        input: typeof FileReadRequestSchema;
+        output: typeof FileReadResponseSchema;
+    };
+    /**
+     * SyncWorkspace pushes the repo tree at rev into the sandbox and records
+     * rev + worker boot id in the registry (single rev-coherence write).
+     *
+     * @generated from rpc easylab.v1.SandboxService.SyncWorkspace
+     */
+    syncWorkspace: {
+        methodKind: "unary";
+        input: typeof SyncWorkspaceRequestSchema;
+        output: typeof SyncWorkspaceResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.FileWrite
+     */
+    fileWrite: {
+        methodKind: "unary";
+        input: typeof FileWriteRequestSchema;
+        output: typeof FileWriteResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.SandboxService.FileList
+     */
+    fileList: {
+        methodKind: "unary";
+        input: typeof FileListRequestSchema;
+        output: typeof FileListResponseSchema;
+    };
+}>;
+export type { ExecuteResponse, ListJobsResponse, JobOutputResponse, JobWaitResponse, JobStdinResponse, JobKillResponse, WatchJobResponse, FileReadResponse, FileWriteResponse, FileListResponse, InfoResponse, JobEntry, WatchJobResponse_Done, } from '../../worker/v1/worker_pb.js';

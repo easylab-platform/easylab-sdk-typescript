@@ -23,6 +23,8 @@ export interface EasyLabClient {
     readonly registry: ReturnType<typeof createRegistryClient>;
     /** Agent surface (sessions/providers/...) served through the gateway. */
     readonly agent: ReturnType<typeof createAgentClient>;
+    /** Sandbox surface (worker-backed sandboxes: jobs observability/console/files). */
+    readonly sandbox: ReturnType<typeof createSandboxClient>;
 }
 declare function createLabClient(transport: Transport): import("@connectrpc/connect").Client<import("@bufbuild/protobuf/codegenv2").GenService<{
     health: {
@@ -500,6 +502,88 @@ declare function createAgentClient(transport: Transport): import("@connectrpc/co
         methodKind: "unary";
         input: typeof import("./agent.js").GetAgentConfigRequestSchema;
         output: typeof import("./agent.js").GetAgentConfigResponseSchema;
+    };
+}>>;
+declare function createSandboxClient(transport: Transport): import("@connectrpc/connect").Client<import("@bufbuild/protobuf/codegenv2").GenService<{
+    listSandboxes: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").ListSandboxesRequestSchema;
+        output: typeof import("./easylab.js").ListSandboxesResponseSchema;
+    };
+    getSandbox: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").GetSandboxRequestSchema;
+        output: typeof import("./easylab.js").GetSandboxResponseSchema;
+    };
+    ensureSandboxImage: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").EnsureSandboxImageRequestSchema;
+        output: typeof import("./easylab.js").EnsureSandboxImageResponseSchema;
+    };
+    launchSandbox: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").LaunchSandboxRequestSchema;
+        output: typeof import("./easylab.js").LaunchSandboxResponseSchema;
+    };
+    deleteSandbox: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").DeleteSandboxRequestSchema;
+        output: typeof import("./easylab.js").DeleteSandboxResponseSchema;
+    };
+    execute: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").ExecuteRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").ExecuteResponseSchema;
+    };
+    listJobs: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").ListJobsRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").ListJobsResponseSchema;
+    };
+    jobOutput: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").JobOutputRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").JobOutputResponseSchema;
+    };
+    watchJob: {
+        methodKind: "server_streaming";
+        input: typeof import("./easylab.js").WatchJobRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").WatchJobResponseSchema;
+    };
+    jobWait: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").JobWaitRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").JobWaitResponseSchema;
+    };
+    jobStdin: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").JobStdinRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").JobStdinResponseSchema;
+    };
+    jobKill: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").JobKillRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").JobKillResponseSchema;
+    };
+    fileRead: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").FileReadRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").FileReadResponseSchema;
+    };
+    syncWorkspace: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").SyncWorkspaceRequestSchema;
+        output: typeof import("./easylab.js").SyncWorkspaceResponseSchema;
+    };
+    fileWrite: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").FileWriteRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").FileWriteResponseSchema;
+    };
+    fileList: {
+        methodKind: "unary";
+        input: typeof import("./easylab.js").FileListRequestSchema;
+        output: typeof import("./gen/worker/v1/worker_pb.js").FileListResponseSchema;
     };
 }>>;
 /** Build the typed easylab gateway client. */

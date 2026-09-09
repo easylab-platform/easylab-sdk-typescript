@@ -7,8 +7,9 @@
 // surfaces. Replaces the hand-written /api/v1/routes. This is the contract the
 // Flutter client and the ext servers consume.
 
-import { ArchiveRequest, ArchiveResponse, BlameRequest, BlameResponse, BranchesRequest, BranchesResponse, BuildRequest, BuildResponse, CloneRepoRequest, CloneRepoResponse, CompareRequest, CompareResponse, CreateBranchRequest, CreateBranchResponse, CreateRepoRequest, CreateRepoResponse, DeleteBranchRequest, DeleteBranchResponse, DeleteMirrorRequest, DeleteMirrorResponse, DeleteOrgRequest, DeleteOrgResponse, DeletePackageRequest, DeletePackageResponse, DeletePackageVersionRequest, DeletePackageVersionResponse, DeleteRepoRequest, DeleteRepoResponse, DeleteServiceRequest, DeleteServiceResponse, DiffRequest, DiffResponse, DownloadReleaseAssetRequest, DownloadReleaseAssetResponse, EnsureOrgRequest, EnsureOrgResponse, EnsureRepoRequest, EnsureRepoResponse, FileHistoryRequest, FileHistoryResponse, ForkRepoRequest, ForkRepoResponse, GetMirrorRequest, GetMirrorResponse, GetServiceRequest, GetServiceResponse, GetTaskRequest, GetTaskResponse, GraphRequest, GraphResponse, HealthRequest, HealthResponse, LaunchServiceRequest, LaunchServiceResponse, ListNamespacesRequest, ListNamespacesResponse, ListPackagesRequest, ListPackagesResponse, ListPackageTypesRequest, ListPackageTypesResponse, ListPublishSpecsRequest, ListPublishSpecsResponse, ListReleasesRequest, ListReleasesResponse, ListReposRequest, ListReposResponse, ListServicesRequest, ListServicesResponse, ListTasksRequest, ListTasksResponse, LogRequest, LogResponse, OCICatalogRequest, OCICatalogResponse, OpsStatusRequest, OpsStatusResponse, PackageVersionsRequest, PackageVersionsResponse, ReadBlobRequest, ReadBlobResponse, RebaseRequest, RebaseResponse, RevisionsRequest, RevisionsResponse, SandboxExecRequest, SandboxExecResponse, SandboxJobKillRequest, SandboxJobKillResponse, SandboxReadRequest, SandboxReadResponse, SandboxWriteRequest, SandboxWriteResponse, ScaleServiceRequest, ScaleServiceResponse, SearchRequest, SearchResponse, SetMirrorRequest, SetMirrorResponse, StatusRequest, StatusResponse, SyncMirrorRequest, SyncMirrorResponse, SyncRequest, SyncResponse, TagsRequest, TagsResponse, TaskLogRequest, TaskLogResponse, TreeRequest, TreeResponse, WriteBlobRequest, WriteBlobResponse } from "./easylab_pb.js";
+import { ArchiveRequest, ArchiveResponse, BlameRequest, BlameResponse, BranchesRequest, BranchesResponse, BuildRequest, BuildResponse, CloneRepoRequest, CloneRepoResponse, CompareRequest, CompareResponse, CreateBranchRequest, CreateBranchResponse, CreateRepoRequest, CreateRepoResponse, DeleteBranchRequest, DeleteBranchResponse, DeleteMirrorRequest, DeleteMirrorResponse, DeleteOrgRequest, DeleteOrgResponse, DeletePackageRequest, DeletePackageResponse, DeletePackageVersionRequest, DeletePackageVersionResponse, DeleteRepoRequest, DeleteRepoResponse, DeleteSandboxRequest, DeleteSandboxResponse, DeleteServiceRequest, DeleteServiceResponse, DiffRequest, DiffResponse, DownloadReleaseAssetRequest, DownloadReleaseAssetResponse, EnsureOrgRequest, EnsureOrgResponse, EnsureRepoRequest, EnsureRepoResponse, EnsureSandboxImageRequest, EnsureSandboxImageResponse, ExecuteRequest, FileHistoryRequest, FileHistoryResponse, FileListRequest, FileReadRequest, FileWriteRequest, ForkRepoRequest, ForkRepoResponse, GetMirrorRequest, GetMirrorResponse, GetSandboxRequest, GetSandboxResponse, GetServiceRequest, GetServiceResponse, GetTaskRequest, GetTaskResponse, GraphRequest, GraphResponse, HealthRequest, HealthResponse, JobKillRequest, JobOutputRequest, JobStdinRequest, JobWaitRequest, LaunchSandboxRequest, LaunchSandboxResponse, LaunchServiceRequest, LaunchServiceResponse, ListJobsRequest, ListNamespacesRequest, ListNamespacesResponse, ListPackagesRequest, ListPackagesResponse, ListPackageTypesRequest, ListPackageTypesResponse, ListPublishSpecsRequest, ListPublishSpecsResponse, ListReleasesRequest, ListReleasesResponse, ListReposRequest, ListReposResponse, ListSandboxesRequest, ListSandboxesResponse, ListServicesRequest, ListServicesResponse, ListTasksRequest, ListTasksResponse, LogRequest, LogResponse, OCICatalogRequest, OCICatalogResponse, OpsStatusRequest, OpsStatusResponse, PackageVersionsRequest, PackageVersionsResponse, ReadBlobRequest, ReadBlobResponse, RebaseRequest, RebaseResponse, RevisionsRequest, RevisionsResponse, SandboxExecRequest, SandboxExecResponse, SandboxJobKillRequest, SandboxJobKillResponse, SandboxReadRequest, SandboxReadResponse, SandboxWriteRequest, SandboxWriteResponse, ScaleServiceRequest, ScaleServiceResponse, SearchRequest, SearchResponse, SetMirrorRequest, SetMirrorResponse, StatusRequest, StatusResponse, SyncMirrorRequest, SyncMirrorResponse, SyncRequest, SyncResponse, SyncWorkspaceRequest, SyncWorkspaceResponse, TagsRequest, TagsResponse, TaskLogRequest, TaskLogResponse, TreeRequest, TreeResponse, WatchJobRequest, WriteBlobRequest, WriteBlobResponse } from "./easylab_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
+import { ExecuteResponse, FileListResponse, FileReadResponse, FileWriteResponse, JobKillResponse, JobOutputResponse, JobStdinResponse, JobWaitResponse, ListJobsResponse, WatchJobResponse } from "../../worker/v1/worker_pb.js";
 
 /**
  * LabService covers the revision-native repo + filesystem surface.
@@ -550,6 +551,169 @@ export const RegistryService = {
       name: "OCICatalog",
       I: OCICatalogRequest,
       O: OCICatalogResponse,
+      kind: MethodKind.Unary,
+    },
+  }
+} as const;
+
+/**
+ * SandboxService fronts every worker.v1 API for the UI/console and owns the
+ * sandbox lifecycle (derived image + launch + sync + registry table).
+ *
+ * @generated from service easylab.v1.SandboxService
+ */
+export const SandboxService = {
+  typeName: "easylab.v1.SandboxService",
+  methods: {
+    /**
+     * lifecycle
+     *
+     * @generated from rpc easylab.v1.SandboxService.ListSandboxes
+     */
+    listSandboxes: {
+      name: "ListSandboxes",
+      I: ListSandboxesRequest,
+      O: ListSandboxesResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.GetSandbox
+     */
+    getSandbox: {
+      name: "GetSandbox",
+      I: GetSandboxRequest,
+      O: GetSandboxResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.EnsureSandboxImage
+     */
+    ensureSandboxImage: {
+      name: "EnsureSandboxImage",
+      I: EnsureSandboxImageRequest,
+      O: EnsureSandboxImageResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.LaunchSandbox
+     */
+    launchSandbox: {
+      name: "LaunchSandbox",
+      I: LaunchSandboxRequest,
+      O: LaunchSandboxResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.DeleteSandbox
+     */
+    deleteSandbox: {
+      name: "DeleteSandbox",
+      I: DeleteSandboxRequest,
+      O: DeleteSandboxResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * worker passthroughs (sandbox routing + worker.v1 payloads)
+     *
+     * @generated from rpc easylab.v1.SandboxService.Execute
+     */
+    execute: {
+      name: "Execute",
+      I: ExecuteRequest,
+      O: ExecuteResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.ListJobs
+     */
+    listJobs: {
+      name: "ListJobs",
+      I: ListJobsRequest,
+      O: ListJobsResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobOutput
+     */
+    jobOutput: {
+      name: "JobOutput",
+      I: JobOutputRequest,
+      O: JobOutputResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.WatchJob
+     */
+    watchJob: {
+      name: "WatchJob",
+      I: WatchJobRequest,
+      O: WatchJobResponse,
+      kind: MethodKind.ServerStreaming,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobWait
+     */
+    jobWait: {
+      name: "JobWait",
+      I: JobWaitRequest,
+      O: JobWaitResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobStdin
+     */
+    jobStdin: {
+      name: "JobStdin",
+      I: JobStdinRequest,
+      O: JobStdinResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.JobKill
+     */
+    jobKill: {
+      name: "JobKill",
+      I: JobKillRequest,
+      O: JobKillResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.FileRead
+     */
+    fileRead: {
+      name: "FileRead",
+      I: FileReadRequest,
+      O: FileReadResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * SyncWorkspace pushes the repo tree at rev into the sandbox and records
+     * rev + worker boot id in the registry (single rev-coherence write).
+     *
+     * @generated from rpc easylab.v1.SandboxService.SyncWorkspace
+     */
+    syncWorkspace: {
+      name: "SyncWorkspace",
+      I: SyncWorkspaceRequest,
+      O: SyncWorkspaceResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.FileWrite
+     */
+    fileWrite: {
+      name: "FileWrite",
+      I: FileWriteRequest,
+      O: FileWriteResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc easylab.v1.SandboxService.FileList
+     */
+    fileList: {
+      name: "FileList",
+      I: FileListRequest,
+      O: FileListResponse,
       kind: MethodKind.Unary,
     },
   }

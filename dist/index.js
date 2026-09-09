@@ -12,7 +12,7 @@
 import { createClient } from '@connectrpc/connect';
 import { createConnectTransport } from '@connectrpc/connect-web';
 import { AgentService } from './gen/agent/v1/agent_pb.js';
-import { LabService, OpsService, RegistryService } from './gen/easylab/v1/easylab_pb.js';
+import { LabService, OpsService, RegistryService, SandboxService, } from './gen/easylab/v1/easylab_pb.js';
 export { AgentService, } from './gen/agent/v1/agent_pb.js';
 export * from './gen/easylab/v1/easylab_pb.js';
 function createLabClient(transport) {
@@ -26,6 +26,9 @@ function createRegistryClient(transport) {
 }
 function createAgentClient(transport) {
     return createClient(AgentService, transport);
+}
+function createSandboxClient(transport) {
+    return createClient(SandboxService, transport);
 }
 /** Build the typed easylab gateway client. */
 export function createEasyLabClient(options) {
@@ -51,5 +54,6 @@ export function createEasyLabClient(options) {
         ops: createOpsClient(transport),
         registry: createRegistryClient(transport),
         agent: createAgentClient(transport),
+        sandbox: createSandboxClient(transport),
     };
 }

@@ -540,3 +540,165 @@ export declare const RegistryService: {
         };
     };
 };
+/**
+ * SandboxService fronts every worker.v1 API for the UI/console and owns the
+ * sandbox lifecycle (derived image + launch + sync + registry table).
+ *
+ * @generated from service easylab.v1.SandboxService
+ */
+export declare const SandboxService: {
+    readonly typeName: "easylab.v1.SandboxService";
+    readonly methods: {
+        /**
+         * lifecycle
+         *
+         * @generated from rpc easylab.v1.SandboxService.ListSandboxes
+         */
+        readonly listSandboxes: {
+            readonly name: "ListSandboxes";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.GetSandbox
+         */
+        readonly getSandbox: {
+            readonly name: "GetSandbox";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.EnsureSandboxImage
+         */
+        readonly ensureSandboxImage: {
+            readonly name: "EnsureSandboxImage";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.LaunchSandbox
+         */
+        readonly launchSandbox: {
+            readonly name: "LaunchSandbox";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.DeleteSandbox
+         */
+        readonly deleteSandbox: {
+            readonly name: "DeleteSandbox";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * worker passthroughs (sandbox routing + worker.v1 payloads)
+         *
+         * @generated from rpc easylab.v1.SandboxService.Execute
+         */
+        readonly execute: {
+            readonly name: "Execute";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.ListJobs
+         */
+        readonly listJobs: {
+            readonly name: "ListJobs";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobOutput
+         */
+        readonly jobOutput: {
+            readonly name: "JobOutput";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.WatchJob
+         */
+        readonly watchJob: {
+            readonly name: "WatchJob";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobWait
+         */
+        readonly jobWait: {
+            readonly name: "JobWait";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobStdin
+         */
+        readonly jobStdin: {
+            readonly name: "JobStdin";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobKill
+         */
+        readonly jobKill: {
+            readonly name: "JobKill";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.FileRead
+         */
+        readonly fileRead: {
+            readonly name: "FileRead";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * SyncWorkspace pushes the repo tree at rev into the sandbox and records
+         * rev + worker boot id in the registry (single rev-coherence write).
+         *
+         * @generated from rpc easylab.v1.SandboxService.SyncWorkspace
+         */
+        readonly syncWorkspace: {
+            readonly name: "SyncWorkspace";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.FileWrite
+         */
+        readonly fileWrite: {
+            readonly name: "FileWrite";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+        /**
+         * @generated from rpc easylab.v1.SandboxService.FileList
+         */
+        readonly fileList: {
+            readonly name: "FileList";
+            readonly I: any;
+            readonly O: any;
+            readonly kind: any;
+        };
+    };
+};

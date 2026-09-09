@@ -14,7 +14,12 @@ import { createClient, type Transport } from '@connectrpc/connect'
 import { createConnectTransport } from '@connectrpc/connect-web'
 
 import { AgentService } from './gen/agent/v1/agent_pb.js'
-import { LabService, OpsService, RegistryService } from './gen/easylab/v1/easylab_pb.js'
+import {
+  LabService,
+  OpsService,
+  RegistryService,
+  SandboxService,
+} from './gen/easylab/v1/easylab_pb.js'
 
 export {
   AgentService,
@@ -61,6 +66,8 @@ export interface EasyLabClient {
   readonly registry: ReturnType<typeof createRegistryClient>
   /** Agent surface (sessions/providers/...) served through the gateway. */
   readonly agent: ReturnType<typeof createAgentClient>
+  /** Sandbox surface (worker-backed sandboxes: jobs observability/console/files). */
+  readonly sandbox: ReturnType<typeof createSandboxClient>
 }
 
 function createLabClient(transport: Transport) {
@@ -74,6 +81,9 @@ function createRegistryClient(transport: Transport) {
 }
 function createAgentClient(transport: Transport) {
   return createClient(AgentService, transport)
+}
+function createSandboxClient(transport: Transport) {
+  return createClient(SandboxService, transport)
 }
 
 /** Build the typed easylab gateway client. */
@@ -101,5 +111,6 @@ export function createEasyLabClient(options: EasyLabClientOptions): EasyLabClien
     ops: createOpsClient(transport),
     registry: createRegistryClient(transport),
     agent: createAgentClient(transport),
+    sandbox: createSandboxClient(transport),
   }
 }

@@ -545,3 +545,165 @@ export const RegistryService = {
         },
     }
 };
+/**
+ * SandboxService fronts every worker.v1 API for the UI/console and owns the
+ * sandbox lifecycle (derived image + launch + sync + registry table).
+ *
+ * @generated from service easylab.v1.SandboxService
+ */
+export const SandboxService = {
+    typeName: "easylab.v1.SandboxService",
+    methods: {
+        /**
+         * lifecycle
+         *
+         * @generated from rpc easylab.v1.SandboxService.ListSandboxes
+         */
+        listSandboxes: {
+            name: "ListSandboxes",
+            I: ListSandboxesRequest,
+            O: ListSandboxesResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.GetSandbox
+         */
+        getSandbox: {
+            name: "GetSandbox",
+            I: GetSandboxRequest,
+            O: GetSandboxResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.EnsureSandboxImage
+         */
+        ensureSandboxImage: {
+            name: "EnsureSandboxImage",
+            I: EnsureSandboxImageRequest,
+            O: EnsureSandboxImageResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.LaunchSandbox
+         */
+        launchSandbox: {
+            name: "LaunchSandbox",
+            I: LaunchSandboxRequest,
+            O: LaunchSandboxResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.DeleteSandbox
+         */
+        deleteSandbox: {
+            name: "DeleteSandbox",
+            I: DeleteSandboxRequest,
+            O: DeleteSandboxResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * worker passthroughs (sandbox routing + worker.v1 payloads)
+         *
+         * @generated from rpc easylab.v1.SandboxService.Execute
+         */
+        execute: {
+            name: "Execute",
+            I: ExecuteRequest,
+            O: ExecuteResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.ListJobs
+         */
+        listJobs: {
+            name: "ListJobs",
+            I: ListJobsRequest,
+            O: ListJobsResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobOutput
+         */
+        jobOutput: {
+            name: "JobOutput",
+            I: JobOutputRequest,
+            O: JobOutputResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.WatchJob
+         */
+        watchJob: {
+            name: "WatchJob",
+            I: WatchJobRequest,
+            O: WatchJobResponse,
+            kind: MethodKind.ServerStreaming,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobWait
+         */
+        jobWait: {
+            name: "JobWait",
+            I: JobWaitRequest,
+            O: JobWaitResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobStdin
+         */
+        jobStdin: {
+            name: "JobStdin",
+            I: JobStdinRequest,
+            O: JobStdinResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.JobKill
+         */
+        jobKill: {
+            name: "JobKill",
+            I: JobKillRequest,
+            O: JobKillResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.FileRead
+         */
+        fileRead: {
+            name: "FileRead",
+            I: FileReadRequest,
+            O: FileReadResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * SyncWorkspace pushes the repo tree at rev into the sandbox and records
+         * rev + worker boot id in the registry (single rev-coherence write).
+         *
+         * @generated from rpc easylab.v1.SandboxService.SyncWorkspace
+         */
+        syncWorkspace: {
+            name: "SyncWorkspace",
+            I: SyncWorkspaceRequest,
+            O: SyncWorkspaceResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.FileWrite
+         */
+        fileWrite: {
+            name: "FileWrite",
+            I: FileWriteRequest,
+            O: FileWriteResponse,
+            kind: MethodKind.Unary,
+        },
+        /**
+         * @generated from rpc easylab.v1.SandboxService.FileList
+         */
+        fileList: {
+            name: "FileList",
+            I: FileListRequest,
+            O: FileListResponse,
+            kind: MethodKind.Unary,
+        },
+    }
+};
