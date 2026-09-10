@@ -1265,6 +1265,13 @@ export type TestProviderRequest = Message$1<"agent.v1.TestProviderRequest"> & {
      * @generated from field: string variant = 6;
      */
     variant: string;
+    /**
+     * What the model under test generates: "text" (default). Only text models
+     * are testable today; image/video/speech are rejected with a clear message.
+     *
+     * @generated from field: string capability = 7;
+     */
+    capability: string;
 };
 /**
  * Describes the message agent.v1.TestProviderRequest.
