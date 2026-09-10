@@ -1,7 +1,7 @@
 {
   "name": "@easylab/sdk",
-  "version": "0.5.0",
-  "description": "EasyLab typed client SDK for TypeScript — buf-generated Connect code (easylab.v1 + agent.v1 + worker.v1). No hand-written wrappers.",
+  "version": "0.6.0",
+  "description": "EasyLab typed client SDK for TypeScript \u2014 buf-generated Connect code (easylab.v1 + agent.v1 + worker.v1). No hand-written wrappers.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

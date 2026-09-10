@@ -16,6 +16,9 @@ export type Session = Message$1<"agent.v1.Session"> & {
      */
     name: string;
     /**
+     * Canonical model reference "provider_id/model_id". A bare model id is
+     * never resolved by flat lookup: the provider must be named explicitly.
+     *
      * @generated from field: string model = 2;
      */
     model: string;
@@ -97,6 +100,22 @@ export type Session = Message$1<"agent.v1.Session"> & {
      * @generated from field: string last_message_preview = 21;
      */
     lastMessagePreview: string;
+    /**
+     * Selected reasoning variant id (e.g. "low"/"medium"/"high"/"max"/"fast").
+     * Empty means "no variant" (provider defaults; no providerOptions sent).
+     *
+     * @generated from field: string variant = 22;
+     */
+    variant: string;
+    /**
+     * Monotonic per-session message counter, bumped for every appended message
+     * (user/assistant/event/compaction). Clients derive the unread count as the
+     * number of messages with seq greater than their locally-persisted read
+     * watermark (read state is client-local; the agent never stores it).
+     *
+     * @generated from field: int32 message_seq = 23;
+     */
+    messageSeq: number;
 };
 /**
  * Describes the message agent.v1.Session.
@@ -280,9 +299,9 @@ export type Provider = Message$1<"agent.v1.Provider"> & {
         [key: string]: string;
     };
     /**
-     * @generated from field: repeated string models = 6;
+     * @generated from field: repeated agent.v1.ProviderModel models = 6;
      */
-    models: string[];
+    models: ProviderModel[];
     /**
      * @generated from field: string updated_at = 7;
      */
@@ -294,7 +313,9 @@ export type Provider = Message$1<"agent.v1.Provider"> & {
  */
 export declare const ProviderSchema: GenMessage<Provider>;
 /**
- * Provider model entry.
+ * Provider model entry. `context_limit` (the model's context window in
+ * tokens) is REQUIRED and user-supplied: it drives compaction budgets, and it
+ * is never inferred from an external catalog.
  *
  * @generated from message agent.v1.ProviderModel
  */
@@ -307,6 +328,10 @@ export type ProviderModel = Message$1<"agent.v1.ProviderModel"> & {
      * @generated from field: string name = 2;
      */
     name: string;
+    /**
+     * @generated from field: int64 context_limit = 3;
+     */
+    contextLimit: bigint;
 };
 /**
  * Describes the message agent.v1.ProviderModel.
@@ -471,6 +496,48 @@ export type WatchSessionResponse = Message$1<"agent.v1.WatchSessionResponse"> & 
  */
 export declare const WatchSessionResponseSchema: GenMessage<WatchSessionResponse>;
 /**
+ * WatchSessions streams the session list in real time: an initial full
+ * snapshot, then per-session upserts (message-fact changes, settings changes)
+ * and removals (deletes). Replaces list polling.
+ *
+ * @generated from message agent.v1.WatchSessionsRequest
+ */
+export type WatchSessionsRequest = Message$1<"agent.v1.WatchSessionsRequest"> & {};
+/**
+ * Describes the message agent.v1.WatchSessionsRequest.
+ * Use `create(WatchSessionsRequestSchema)` to create a new message.
+ */
+export declare const WatchSessionsRequestSchema: GenMessage<WatchSessionsRequest>;
+/**
+ * @generated from message agent.v1.WatchSessionsResponse
+ */
+export type WatchSessionsResponse = Message$1<"agent.v1.WatchSessionsResponse"> & {
+    /**
+     * New/updated session snapshots (message facts + settings).
+     *
+     * @generated from field: repeated agent.v1.Session upserts = 1;
+     */
+    upserts: Session[];
+    /**
+     * Session names that were removed.
+     *
+     * @generated from field: repeated string removed = 2;
+     */
+    removed: string[];
+    /**
+     * True for the initial full snapshot: the client replaces its whole list
+     * with `upserts` (dropping anything not present) instead of merging.
+     *
+     * @generated from field: bool snapshot = 3;
+     */
+    snapshot: boolean;
+};
+/**
+ * Describes the message agent.v1.WatchSessionsResponse.
+ * Use `create(WatchSessionsResponseSchema)` to create a new message.
+ */
+export declare const WatchSessionsResponseSchema: GenMessage<WatchSessionsResponse>;
+/**
  * A file reference (attachment).
  *
  * @generated from message agent.v1.FileRef
@@ -530,6 +597,8 @@ export type CreateSessionRequest = Message$1<"agent.v1.CreateSessionRequest"> & 
      */
     name: string;
     /**
+     * Canonical model reference "provider_id/model_id".
+     *
      * @generated from field: string model = 2;
      */
     model: string;
@@ -549,6 +618,12 @@ export type CreateSessionRequest = Message$1<"agent.v1.CreateSessionRequest"> & 
      * @generated from field: string branch = 6;
      */
     branch: string;
+    /**
+     * Optional reasoning variant id (see ModelInfo.variants).
+     *
+     * @generated from field: string variant = 7;
+     */
+    variant: string;
 };
 /**
  * Describes the message agent.v1.CreateSessionRequest.
@@ -775,6 +850,10 @@ export type SetModelRequest = Message$1<"agent.v1.SetModelRequest"> & {
      * @generated from field: string model = 2;
      */
     model: string;
+    /**
+     * @generated from field: string variant = 3;
+     */
+    variant: string;
 };
 /**
  * Describes the message agent.v1.SetModelRequest.
@@ -904,9 +983,12 @@ export type UpdateSettingsRequest = Message$1<"agent.v1.UpdateSettingsRequest"> 
      */
     preset: string;
     /**
-     * @generated from field: int32 max_turns = 4;
+     * Optional: omitted means "inherit (preset / default)"; an explicit value
+     * must be > 0 (0 is rejected).
+     *
+     * @generated from field: optional int32 max_turns = 4;
      */
-    maxTurns: number;
+    maxTurns?: number | undefined;
     /**
      * @generated from field: string system_prompt = 5;
      */
@@ -915,6 +997,12 @@ export type UpdateSettingsRequest = Message$1<"agent.v1.UpdateSettingsRequest"> 
      * @generated from field: string locale = 6;
      */
     locale: string;
+    /**
+     * Selected reasoning variant id (empty clears it).
+     *
+     * @generated from field: string variant = 7;
+     */
+    variant: string;
 };
 /**
  * Describes the message agent.v1.UpdateSettingsRequest.
@@ -1159,6 +1247,12 @@ export type TestProviderRequest = Message$1<"agent.v1.TestProviderRequest"> & {
      * @generated from field: string model = 5;
      */
     model: string;
+    /**
+     * Optional reasoning variant id to exercise in the test generation.
+     *
+     * @generated from field: string variant = 6;
+     */
+    variant: string;
 };
 /**
  * Describes the message agent.v1.TestProviderRequest.
@@ -1227,12 +1321,50 @@ export type ModelInfo = Message$1<"agent.v1.ModelInfo"> & {
      * @generated from field: string name = 2;
      */
     name: string;
+    /**
+     * Reasoning variants offered by this model (from the models.dev catalog).
+     * Empty when the model has no reasoning options or is not in the catalog.
+     *
+     * @generated from field: repeated agent.v1.ModelVariant variants = 3;
+     */
+    variants: ModelVariant[];
+    /**
+     * Context window (tokens) configured for this provider model.
+     *
+     * @generated from field: int64 context_limit = 4;
+     */
+    contextLimit: bigint;
 };
 /**
  * Describes the message agent.v1.ModelInfo.
  * Use `create(ModelInfoSchema)` to create a new message.
  */
 export declare const ModelInfoSchema: GenMessage<ModelInfo>;
+/**
+ * A selectable reasoning variant for a model (e.g. low/medium/high/max, or a
+ * fast mode). `id` is passed back on CreateSession/SetModel/UpdateSettings.
+ *
+ * @generated from message agent.v1.ModelVariant
+ */
+export type ModelVariant = Message$1<"agent.v1.ModelVariant"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
+    /**
+     * @generated from field: string description = 3;
+     */
+    description: string;
+};
+/**
+ * Describes the message agent.v1.ModelVariant.
+ * Use `create(ModelVariantSchema)` to create a new message.
+ */
+export declare const ModelVariantSchema: GenMessage<ModelVariant>;
 /**
  * ListPresets lists presets. When locale is set (e.g. "zh"), each preset's
  * system_prompt is resolved from its i18n map for that locale, falling back
@@ -1805,6 +1937,14 @@ export declare const AgentService: GenService<{
         methodKind: "server_streaming";
         input: typeof WatchSessionRequestSchema;
         output: typeof WatchSessionResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AgentService.WatchSessions
+     */
+    watchSessions: {
+        methodKind: "server_streaming";
+        input: typeof WatchSessionsRequestSchema;
+        output: typeof WatchSessionsResponseSchema;
     };
     /**
      * @generated from rpc agent.v1.AgentService.Fork
