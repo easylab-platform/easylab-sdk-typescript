@@ -1,7 +1,7 @@
 {
   "name": "@easylab/sdk",
-  "version": "0.4.4",
-  "description": "EasyLab typed client SDK for TypeScript (Connect: easylab.v1 + agent.v1 via the easylab gateway).",
+  "version": "0.5.0",
+  "description": "EasyLab typed client SDK for TypeScript — buf-generated Connect code (easylab.v1 + agent.v1 + worker.v1). No hand-written wrappers.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,21 +10,13 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./web": {
-      "types": "./dist/web.d.ts",
-      "default": "./dist/web.js"
-    },
-    "./node": {
-      "types": "./dist/node.d.ts",
-      "node": "./dist/node.js"
-    },
     "./agent": {
       "types": "./dist/agent.d.ts",
       "default": "./dist/agent.js"
     },
-    "./easylab": {
-      "types": "./dist/easylab.d.ts",
-      "default": "./dist/easylab.js"
+    "./worker": {
+      "types": "./dist/worker.d.ts",
+      "default": "./dist/worker.js"
     }
   },
   "files": [
@@ -33,14 +25,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc --noEmit",
-    "prepare": "npm run build",
-    "test": "node scripts/smoke-node.mjs && node scripts/smoke-web.mjs"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.14.1",
-    "@connectrpc/connect": "^2.2.0",
-    "@connectrpc/connect-web": "^2.2.0",
-    "@connectrpc/connect-node": "^2.2.0"
+    "@connectrpc/connect": "^2.2.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

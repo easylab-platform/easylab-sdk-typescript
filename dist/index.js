@@ -1,59 +1,12 @@
 // EasyLab typed client SDK for TypeScript.
 //
-// One entrypoint, one baseUrl: the easylab gateway. It serves both the
-// easylab.v1.* surface (lab/ops/registry) and the agent.v1.* surface
-// (sessions/providers/... forwarded to the abc agent backend). Web frontends
-// never talk to the agent directly.
+// This package ships ONLY the buf-generated Connect code for the easylab
+// gateway surface — no hand-written transport, auth, or client wrappers. The
+// caller builds its own `Transport` (connect-web / connect-node) and passes it
+// to `createClient(<Service>, transport)`.
 //
-// Usage:
-//   const client = createEasyLabClient({ baseUrl: 'https://easylab.example.com', token: '...' })
-//   const repos = await client.lab.listRepos({})
-//   const sessions = await client.agent.listSessions({})
-import { createClient } from '@connectrpc/connect';
-import { createConnectTransport } from '@connectrpc/connect-web';
-import { AgentService } from './gen/agent/v1/agent_pb.js';
-import { LabService, OpsService, RegistryService, SandboxService, } from './gen/easylab/v1/easylab_pb.js';
-export { AgentService, } from './gen/agent/v1/agent_pb.js';
+// Entrypoints:
+//   @easylab/sdk         → easylab.v1 (lab + ops + registry + sandbox + workflow)
+//   @easylab/sdk/agent   → agent.v1 (the gateway's forwarded agent surface)
+//   @easylab/sdk/worker  → worker.v1 (sandbox worker payloads)
 export * from './gen/easylab/v1/easylab_pb.js';
-function createLabClient(transport) {
-    return createClient(LabService, transport);
-}
-function createOpsClient(transport) {
-    return createClient(OpsService, transport);
-}
-function createRegistryClient(transport) {
-    return createClient(RegistryService, transport);
-}
-function createAgentClient(transport) {
-    return createClient(AgentService, transport);
-}
-function createSandboxClient(transport) {
-    return createClient(SandboxService, transport);
-}
-/** Build the typed easylab gateway client. */
-export function createEasyLabClient(options) {
-    const headers = { ...(options.headers ?? {}) };
-    if (options.token && !headers['Authorization']) {
-        headers['Authorization'] = `Bearer ${options.token}`;
-    }
-    const transport = options.transport ??
-        createConnectTransport({
-            baseUrl: options.baseUrl.replace(/\/+$/, ''),
-            interceptors: [
-                next => async (req) => {
-                    for (const [k, v] of Object.entries(headers)) {
-                        req.header.set(k, v);
-                    }
-                    return await next(req);
-                },
-            ],
-        });
-    return {
-        transport,
-        lab: createLabClient(transport),
-        ops: createOpsClient(transport),
-        registry: createRegistryClient(transport),
-        agent: createAgentClient(transport),
-        sandbox: createSandboxClient(transport),
-    };
-}

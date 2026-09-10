@@ -1652,70 +1652,6 @@ export type GetTaskResponse = Message<"easylab.v1.GetTaskResponse"> & {
  */
 export declare const GetTaskResponseSchema: GenMessage<GetTaskResponse>;
 /**
- * @generated from message easylab.v1.BuildRequest
- */
-export type BuildRequest = Message<"easylab.v1.BuildRequest"> & {
-    /**
-     * @generated from field: string org = 1;
-     */
-    org: string;
-    /**
-     * @generated from field: string repo = 2;
-     */
-    repo: string;
-    /**
-     * @generated from field: string ref = 3;
-     */
-    ref: string;
-    /**
-     * @generated from field: string dockerfile_path = 4;
-     */
-    dockerfilePath: string;
-    /**
-     * @generated from field: string tag = 5;
-     */
-    tag: string;
-    /**
-     * @generated from field: string context = 6;
-     */
-    context: string;
-    /**
-     * @generated from field: bool no_cache = 7;
-     */
-    noCache: boolean;
-};
-/**
- * Describes the message easylab.v1.BuildRequest.
- * Use `create(BuildRequestSchema)` to create a new message.
- */
-export declare const BuildRequestSchema: GenMessage<BuildRequest>;
-/**
- * @generated from message easylab.v1.BuildResponse
- */
-export type BuildResponse = Message<"easylab.v1.BuildResponse"> & {
-    /**
-     * @generated from field: bool ok = 1;
-     */
-    ok: boolean;
-    /**
-     * @generated from field: string task_id = 2;
-     */
-    taskId: string;
-    /**
-     * @generated from field: string image = 3;
-     */
-    image: string;
-    /**
-     * @generated from field: string error = 4;
-     */
-    error: string;
-};
-/**
- * Describes the message easylab.v1.BuildResponse.
- * Use `create(BuildResponseSchema)` to create a new message.
- */
-export declare const BuildResponseSchema: GenMessage<BuildResponse>;
-/**
  * @generated from message easylab.v1.OpsStatusRequest
  */
 export type OpsStatusRequest = Message<"easylab.v1.OpsStatusRequest"> & {};
@@ -3376,6 +3312,606 @@ export type FileListRequest = Message<"easylab.v1.FileListRequest"> & {
  */
 export declare const FileListRequestSchema: GenMessage<FileListRequest>;
 /**
+ * @generated from message easylab.v1.Runner
+ */
+export type Runner = Message<"easylab.v1.Runner"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * os=linux|windows|macos, arch=, is_container=, toolchain=
+     *
+     * @generated from field: repeated string labels = 2;
+     */
+    labels: string[];
+    /**
+     * podman | host
+     *
+     * @generated from field: string backend = 3;
+     */
+    backend: string;
+    /**
+     * host runner dial address
+     *
+     * @generated from field: string addr = 4;
+     */
+    addr: string;
+    /**
+     * heartbeat unix millis
+     *
+     * @generated from field: int64 last_seen = 5;
+     */
+    lastSeen: bigint;
+    /**
+     * true = sandbox worker (not in CI pool)
+     *
+     * @generated from field: bool session_bound = 6;
+     */
+    sessionBound: boolean;
+};
+/**
+ * Describes the message easylab.v1.Runner.
+ * Use `create(RunnerSchema)` to create a new message.
+ */
+export declare const RunnerSchema: GenMessage<Runner>;
+/**
+ * @generated from message easylab.v1.Trigger
+ */
+export type Trigger = Message<"easylab.v1.Trigger"> & {
+    /**
+     * @generated from field: repeated string events = 1;
+     */
+    events: string[];
+};
+/**
+ * Describes the message easylab.v1.Trigger.
+ * Use `create(TriggerSchema)` to create a new message.
+ */
+export declare const TriggerSchema: GenMessage<Trigger>;
+/**
+ * @generated from message easylab.v1.Step
+ */
+export type Step = Message<"easylab.v1.Step"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+    /**
+     * @generated from field: string run = 2;
+     */
+    run: string;
+    /**
+     * @generated from field: map<string, string> env = 3;
+     */
+    env: {
+        [key: string]: string;
+    };
+    /**
+     * @generated from field: string working_directory = 4;
+     */
+    workingDirectory: string;
+};
+/**
+ * Describes the message easylab.v1.Step.
+ * Use `create(StepSchema)` to create a new message.
+ */
+export declare const StepSchema: GenMessage<Step>;
+/**
+ * @generated from message easylab.v1.Produce
+ */
+export type Produce = Message<"easylab.v1.Produce"> & {
+    /**
+     * oci-build | artifact-upload | publish-protocol
+     *
+     * @generated from field: string action = 1;
+     */
+    action: string;
+    /**
+     * oci-build: build context (default workspace root)
+     *
+     * @generated from field: string context = 2;
+     */
+    context: string;
+    /**
+     * oci-build: Dockerfile path (default root/Dockerfile)
+     *
+     * @generated from field: string dockerfile = 3;
+     */
+    dockerfile: string;
+    /**
+     * oci-build: image tag
+     *
+     * @generated from field: string tag = 4;
+     */
+    tag: string;
+    /**
+     * artifact-upload: glob path(s) relative to workspace
+     *
+     * @generated from field: string path = 5;
+     */
+    path: string;
+    /**
+     * artifact-upload: workspace | release | registry
+     *
+     * @generated from field: string destination = 6;
+     */
+    destination: string;
+    /**
+     * artifact-upload: release tag/ref
+     *
+     * @generated from field: string ref = 7;
+     */
+    ref: string;
+    /**
+     * publish-protocol: npm/pypi/cargo/...
+     *
+     * @generated from field: string protocol = 8;
+     */
+    protocol: string;
+    /**
+     * @generated from field: string name = 9;
+     */
+    name: string;
+    /**
+     * @generated from field: string version = 10;
+     */
+    version: string;
+    /**
+     * @generated from field: string file = 11;
+     */
+    file: string;
+    /**
+     * oci-build: inline Dockerfile/Containerfile body
+     *
+     * @generated from field: string containerfile = 12;
+     */
+    containerfile: string;
+};
+/**
+ * Describes the message easylab.v1.Produce.
+ * Use `create(ProduceSchema)` to create a new message.
+ */
+export declare const ProduceSchema: GenMessage<Produce>;
+/**
+ * @generated from message easylab.v1.JobDef
+ */
+export type JobDef = Message<"easylab.v1.JobDef"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * prerequisite job ids (DAG order)
+     *
+     * @generated from field: repeated string needs = 2;
+     */
+    needs: string[];
+    /**
+     * runner labels (os/arch/is_container/toolchain)
+     *
+     * @generated from field: repeated string runs_on = 3;
+     */
+    runsOn: string[];
+    /**
+     * explicit image override
+     *
+     * @generated from field: string container = 4;
+     */
+    container: string;
+    /**
+     * @generated from field: string working_directory = 5;
+     */
+    workingDirectory: string;
+    /**
+     * @generated from field: repeated easylab.v1.Step steps = 6;
+     */
+    steps: Step[];
+    /**
+     * @generated from field: easylab.v1.Produce produce = 7;
+     */
+    produce?: Produce | undefined;
+};
+/**
+ * Describes the message easylab.v1.JobDef.
+ * Use `create(JobDefSchema)` to create a new message.
+ */
+export declare const JobDefSchema: GenMessage<JobDef>;
+/**
+ * @generated from message easylab.v1.Workflow
+ */
+export type Workflow = Message<"easylab.v1.Workflow"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
+    /**
+     * @generated from field: string org = 3;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 4;
+     */
+    repo: string;
+    /**
+     * @generated from field: string branch = 5;
+     */
+    branch: string;
+    /**
+     * @generated from field: easylab.v1.Trigger on = 6;
+     */
+    on?: Trigger | undefined;
+    /**
+     * @generated from field: repeated easylab.v1.JobDef jobs = 7;
+     */
+    jobs: JobDef[];
+};
+/**
+ * Describes the message easylab.v1.Workflow.
+ * Use `create(WorkflowSchema)` to create a new message.
+ */
+export declare const WorkflowSchema: GenMessage<Workflow>;
+/**
+ * @generated from message easylab.v1.JobInstance
+ */
+export type JobInstance = Message<"easylab.v1.JobInstance"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string def_id = 2;
+     */
+    defId: string;
+    /**
+     * pending | running | success | failure | cancelled
+     *
+     * @generated from field: string status = 3;
+     */
+    status: string;
+    /**
+     * @generated from field: string result = 4;
+     */
+    result: string;
+};
+/**
+ * Describes the message easylab.v1.JobInstance.
+ * Use `create(JobInstanceSchema)` to create a new message.
+ */
+export declare const JobInstanceSchema: GenMessage<JobInstance>;
+/**
+ * @generated from message easylab.v1.Run
+ */
+export type Run = Message<"easylab.v1.Run"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string workflow_id = 2;
+     */
+    workflowId: string;
+    /**
+     * pending | running | success | failure
+     *
+     * @generated from field: string status = 3;
+     */
+    status: string;
+    /**
+     * @generated from field: repeated easylab.v1.JobInstance jobs = 4;
+     */
+    jobs: JobInstance[];
+    /**
+     * @generated from field: string started_at = 5;
+     */
+    startedAt: string;
+    /**
+     * @generated from field: string finished_at = 6;
+     */
+    finishedAt: string;
+};
+/**
+ * Describes the message easylab.v1.Run.
+ * Use `create(RunSchema)` to create a new message.
+ */
+export declare const RunSchema: GenMessage<Run>;
+/**
+ * @generated from message easylab.v1.GetWorkflowRequest
+ */
+export type GetWorkflowRequest = Message<"easylab.v1.GetWorkflowRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+};
+/**
+ * Describes the message easylab.v1.GetWorkflowRequest.
+ * Use `create(GetWorkflowRequestSchema)` to create a new message.
+ */
+export declare const GetWorkflowRequestSchema: GenMessage<GetWorkflowRequest>;
+/**
+ * @generated from message easylab.v1.GetWorkflowResponse
+ */
+export type GetWorkflowResponse = Message<"easylab.v1.GetWorkflowResponse"> & {
+    /**
+     * @generated from field: easylab.v1.Workflow workflow = 1;
+     */
+    workflow?: Workflow | undefined;
+};
+/**
+ * Describes the message easylab.v1.GetWorkflowResponse.
+ * Use `create(GetWorkflowResponseSchema)` to create a new message.
+ */
+export declare const GetWorkflowResponseSchema: GenMessage<GetWorkflowResponse>;
+/**
+ * @generated from message easylab.v1.CreateWorkflowRequest
+ */
+export type CreateWorkflowRequest = Message<"easylab.v1.CreateWorkflowRequest"> & {
+    /**
+     * @generated from field: easylab.v1.Workflow workflow = 1;
+     */
+    workflow?: Workflow | undefined;
+};
+/**
+ * Describes the message easylab.v1.CreateWorkflowRequest.
+ * Use `create(CreateWorkflowRequestSchema)` to create a new message.
+ */
+export declare const CreateWorkflowRequestSchema: GenMessage<CreateWorkflowRequest>;
+/**
+ * @generated from message easylab.v1.CreateWorkflowResponse
+ */
+export type CreateWorkflowResponse = Message<"easylab.v1.CreateWorkflowResponse"> & {
+    /**
+     * @generated from field: easylab.v1.Workflow workflow = 1;
+     */
+    workflow?: Workflow | undefined;
+};
+/**
+ * Describes the message easylab.v1.CreateWorkflowResponse.
+ * Use `create(CreateWorkflowResponseSchema)` to create a new message.
+ */
+export declare const CreateWorkflowResponseSchema: GenMessage<CreateWorkflowResponse>;
+/**
+ * @generated from message easylab.v1.ListWorkflowsRequest
+ */
+export type ListWorkflowsRequest = Message<"easylab.v1.ListWorkflowsRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+};
+/**
+ * Describes the message easylab.v1.ListWorkflowsRequest.
+ * Use `create(ListWorkflowsRequestSchema)` to create a new message.
+ */
+export declare const ListWorkflowsRequestSchema: GenMessage<ListWorkflowsRequest>;
+/**
+ * @generated from message easylab.v1.ListWorkflowsResponse
+ */
+export type ListWorkflowsResponse = Message<"easylab.v1.ListWorkflowsResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.Workflow workflows = 1;
+     */
+    workflows: Workflow[];
+};
+/**
+ * Describes the message easylab.v1.ListWorkflowsResponse.
+ * Use `create(ListWorkflowsResponseSchema)` to create a new message.
+ */
+export declare const ListWorkflowsResponseSchema: GenMessage<ListWorkflowsResponse>;
+/**
+ * @generated from message easylab.v1.TriggerRunRequest
+ */
+export type TriggerRunRequest = Message<"easylab.v1.TriggerRunRequest"> & {
+    /**
+     * @generated from field: string workflow_id = 1;
+     */
+    workflowId: string;
+};
+/**
+ * Describes the message easylab.v1.TriggerRunRequest.
+ * Use `create(TriggerRunRequestSchema)` to create a new message.
+ */
+export declare const TriggerRunRequestSchema: GenMessage<TriggerRunRequest>;
+/**
+ * @generated from message easylab.v1.TriggerRunResponse
+ */
+export type TriggerRunResponse = Message<"easylab.v1.TriggerRunResponse"> & {
+    /**
+     * @generated from field: easylab.v1.Run run = 1;
+     */
+    run?: Run | undefined;
+};
+/**
+ * Describes the message easylab.v1.TriggerRunResponse.
+ * Use `create(TriggerRunResponseSchema)` to create a new message.
+ */
+export declare const TriggerRunResponseSchema: GenMessage<TriggerRunResponse>;
+/**
+ * @generated from message easylab.v1.GetRunRequest
+ */
+export type GetRunRequest = Message<"easylab.v1.GetRunRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+};
+/**
+ * Describes the message easylab.v1.GetRunRequest.
+ * Use `create(GetRunRequestSchema)` to create a new message.
+ */
+export declare const GetRunRequestSchema: GenMessage<GetRunRequest>;
+/**
+ * @generated from message easylab.v1.GetRunResponse
+ */
+export type GetRunResponse = Message<"easylab.v1.GetRunResponse"> & {
+    /**
+     * @generated from field: easylab.v1.Run run = 1;
+     */
+    run?: Run | undefined;
+};
+/**
+ * Describes the message easylab.v1.GetRunResponse.
+ * Use `create(GetRunResponseSchema)` to create a new message.
+ */
+export declare const GetRunResponseSchema: GenMessage<GetRunResponse>;
+/**
+ * @generated from message easylab.v1.ListRunsRequest
+ */
+export type ListRunsRequest = Message<"easylab.v1.ListRunsRequest"> & {
+    /**
+     * @generated from field: string workflow_id = 1;
+     */
+    workflowId: string;
+};
+/**
+ * Describes the message easylab.v1.ListRunsRequest.
+ * Use `create(ListRunsRequestSchema)` to create a new message.
+ */
+export declare const ListRunsRequestSchema: GenMessage<ListRunsRequest>;
+/**
+ * @generated from message easylab.v1.ListRunsResponse
+ */
+export type ListRunsResponse = Message<"easylab.v1.ListRunsResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.Run runs = 1;
+     */
+    runs: Run[];
+};
+/**
+ * Describes the message easylab.v1.ListRunsResponse.
+ * Use `create(ListRunsResponseSchema)` to create a new message.
+ */
+export declare const ListRunsResponseSchema: GenMessage<ListRunsResponse>;
+/**
+ * @generated from message easylab.v1.RunJobLogRequest
+ */
+export type RunJobLogRequest = Message<"easylab.v1.RunJobLogRequest"> & {
+    /**
+     * @generated from field: string run_id = 1;
+     */
+    runId: string;
+    /**
+     * @generated from field: string job_id = 2;
+     */
+    jobId: string;
+};
+/**
+ * Describes the message easylab.v1.RunJobLogRequest.
+ * Use `create(RunJobLogRequestSchema)` to create a new message.
+ */
+export declare const RunJobLogRequestSchema: GenMessage<RunJobLogRequest>;
+/**
+ * @generated from message easylab.v1.RunJobLogResponse
+ */
+export type RunJobLogResponse = Message<"easylab.v1.RunJobLogResponse"> & {
+    /**
+     * @generated from field: string stream = 1;
+     */
+    stream: string;
+    /**
+     * @generated from field: string line = 2;
+     */
+    line: string;
+};
+/**
+ * Describes the message easylab.v1.RunJobLogResponse.
+ * Use `create(RunJobLogResponseSchema)` to create a new message.
+ */
+export declare const RunJobLogResponseSchema: GenMessage<RunJobLogResponse>;
+/**
+ * @generated from message easylab.v1.CancelRunRequest
+ */
+export type CancelRunRequest = Message<"easylab.v1.CancelRunRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+};
+/**
+ * Describes the message easylab.v1.CancelRunRequest.
+ * Use `create(CancelRunRequestSchema)` to create a new message.
+ */
+export declare const CancelRunRequestSchema: GenMessage<CancelRunRequest>;
+/**
+ * @generated from message easylab.v1.CancelRunResponse
+ */
+export type CancelRunResponse = Message<"easylab.v1.CancelRunResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+};
+/**
+ * Describes the message easylab.v1.CancelRunResponse.
+ * Use `create(CancelRunResponseSchema)` to create a new message.
+ */
+export declare const CancelRunResponseSchema: GenMessage<CancelRunResponse>;
+/**
+ * @generated from message easylab.v1.RegisterRunnerRequest
+ */
+export type RegisterRunnerRequest = Message<"easylab.v1.RegisterRunnerRequest"> & {
+    /**
+     * @generated from field: easylab.v1.Runner runner = 1;
+     */
+    runner?: Runner | undefined;
+};
+/**
+ * Describes the message easylab.v1.RegisterRunnerRequest.
+ * Use `create(RegisterRunnerRequestSchema)` to create a new message.
+ */
+export declare const RegisterRunnerRequestSchema: GenMessage<RegisterRunnerRequest>;
+/**
+ * @generated from message easylab.v1.RegisterRunnerResponse
+ */
+export type RegisterRunnerResponse = Message<"easylab.v1.RegisterRunnerResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+};
+/**
+ * Describes the message easylab.v1.RegisterRunnerResponse.
+ * Use `create(RegisterRunnerResponseSchema)` to create a new message.
+ */
+export declare const RegisterRunnerResponseSchema: GenMessage<RegisterRunnerResponse>;
+/**
+ * @generated from message easylab.v1.ListRunnersRequest
+ */
+export type ListRunnersRequest = Message<"easylab.v1.ListRunnersRequest"> & {
+    /**
+     * @generated from field: bool session_bound = 1;
+     */
+    sessionBound: boolean;
+};
+/**
+ * Describes the message easylab.v1.ListRunnersRequest.
+ * Use `create(ListRunnersRequestSchema)` to create a new message.
+ */
+export declare const ListRunnersRequestSchema: GenMessage<ListRunnersRequest>;
+/**
+ * @generated from message easylab.v1.ListRunnersResponse
+ */
+export type ListRunnersResponse = Message<"easylab.v1.ListRunnersResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.Runner runners = 1;
+     */
+    runners: Runner[];
+};
+/**
+ * Describes the message easylab.v1.ListRunnersResponse.
+ * Use `create(ListRunnersResponseSchema)` to create a new message.
+ */
+export declare const ListRunnersResponseSchema: GenMessage<ListRunnersResponse>;
+/**
  * @generated from enum easylab.v1.ServiceKind
  */
 export declare enum ServiceKind {
@@ -3786,14 +4322,6 @@ export declare const OpsService: GenService<{
         output: typeof GetTaskResponseSchema;
     };
     /**
-     * @generated from rpc easylab.v1.OpsService.Build
-     */
-    build: {
-        methodKind: "unary";
-        input: typeof BuildRequestSchema;
-        output: typeof BuildResponseSchema;
-    };
-    /**
      * @generated from rpc easylab.v1.OpsService.TaskLog
      */
     taskLog: {
@@ -4016,4 +4544,88 @@ export declare const SandboxService: GenService<{
         output: typeof FileListResponseSchema;
     };
 }>;
-export type { ExecuteResponse, ListJobsResponse, JobOutputResponse, JobWaitResponse, JobStdinResponse, JobKillResponse, WatchJobResponse, FileReadResponse, FileWriteResponse, FileListResponse, InfoResponse, JobEntry, WatchJobResponse_Done, } from '../../worker/v1/worker_pb.js';
+/**
+ * @generated from service easylab.v1.WorkflowService
+ */
+export declare const WorkflowService: GenService<{
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.CreateWorkflow
+     */
+    createWorkflow: {
+        methodKind: "unary";
+        input: typeof CreateWorkflowRequestSchema;
+        output: typeof CreateWorkflowResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.GetWorkflow
+     */
+    getWorkflow: {
+        methodKind: "unary";
+        input: typeof GetWorkflowRequestSchema;
+        output: typeof GetWorkflowResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.ListWorkflows
+     */
+    listWorkflows: {
+        methodKind: "unary";
+        input: typeof ListWorkflowsRequestSchema;
+        output: typeof ListWorkflowsResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.TriggerRun
+     */
+    triggerRun: {
+        methodKind: "unary";
+        input: typeof TriggerRunRequestSchema;
+        output: typeof TriggerRunResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.GetRun
+     */
+    getRun: {
+        methodKind: "unary";
+        input: typeof GetRunRequestSchema;
+        output: typeof GetRunResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.ListRuns
+     */
+    listRuns: {
+        methodKind: "unary";
+        input: typeof ListRunsRequestSchema;
+        output: typeof ListRunsResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.RunJobLog
+     */
+    runJobLog: {
+        methodKind: "server_streaming";
+        input: typeof RunJobLogRequestSchema;
+        output: typeof RunJobLogResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.CancelRun
+     */
+    cancelRun: {
+        methodKind: "unary";
+        input: typeof CancelRunRequestSchema;
+        output: typeof CancelRunResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.RegisterRunner
+     */
+    registerRunner: {
+        methodKind: "unary";
+        input: typeof RegisterRunnerRequestSchema;
+        output: typeof RegisterRunnerResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.WorkflowService.ListRunners
+     */
+    listRunners: {
+        methodKind: "unary";
+        input: typeof ListRunnersRequestSchema;
+        output: typeof ListRunnersResponseSchema;
+    };
+}>;

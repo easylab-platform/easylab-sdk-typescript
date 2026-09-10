@@ -1184,9 +1184,18 @@ export type TestProviderResponse = Message$1<"agent.v1.TestProviderResponse"> & 
  */
 export declare const TestProviderResponseSchema: GenMessage<TestProviderResponse>;
 /**
+ * ListModels returns the models of ONE provider. provider_id is required: the
+ * server rejects an empty value (InvalidArgument) so a global flat model list
+ * — which would surface duplicate ids across providers — is never produced.
+ *
  * @generated from message agent.v1.ListModelsRequest
  */
-export type ListModelsRequest = Message$1<"agent.v1.ListModelsRequest"> & {};
+export type ListModelsRequest = Message$1<"agent.v1.ListModelsRequest"> & {
+    /**
+     * @generated from field: string provider_id = 1;
+     */
+    providerId: string;
+};
 /**
  * Describes the message agent.v1.ListModelsRequest.
  * Use `create(ListModelsRequestSchema)` to create a new message.
@@ -1225,9 +1234,18 @@ export type ModelInfo = Message$1<"agent.v1.ModelInfo"> & {
  */
 export declare const ModelInfoSchema: GenMessage<ModelInfo>;
 /**
+ * ListPresets lists presets. When locale is set (e.g. "zh"), each preset's
+ * system_prompt is resolved from its i18n map for that locale, falling back
+ * to the default prompt.
+ *
  * @generated from message agent.v1.ListPresetsRequest
  */
-export type ListPresetsRequest = Message$1<"agent.v1.ListPresetsRequest"> & {};
+export type ListPresetsRequest = Message$1<"agent.v1.ListPresetsRequest"> & {
+    /**
+     * @generated from field: string locale = 1;
+     */
+    locale: string;
+};
 /**
  * Describes the message agent.v1.ListPresetsRequest.
  * Use `create(ListPresetsRequestSchema)` to create a new message.
