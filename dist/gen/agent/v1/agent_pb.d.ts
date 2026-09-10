@@ -329,9 +329,21 @@ export type ProviderModel = Message$1<"agent.v1.ProviderModel"> & {
      */
     name: string;
     /**
+     * Context window (tokens). REQUIRED (> 0) for text models (drives
+     * compaction budgets); ignored for generation models (image/video/speech).
+     *
      * @generated from field: int64 context_limit = 3;
      */
     contextLimit: bigint;
+    /**
+     * What the model generates: "text" (default, chat/vision), "image",
+     * "video", or "speech". Text models feed sessions; generation models are
+     * resolved by tools (image-generate / image-edit / video-generate /
+     * tts-generate) via the same provider registry.
+     *
+     * @generated from field: string capability = 4;
+     */
+    capability: string;
 };
 /**
  * Describes the message agent.v1.ProviderModel.
