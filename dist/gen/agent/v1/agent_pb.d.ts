@@ -313,9 +313,13 @@ export type Provider = Message$1<"agent.v1.Provider"> & {
  */
 export declare const ProviderSchema: GenMessage<Provider>;
 /**
- * Provider model entry. `context_limit` (the model's context window in
- * tokens) is REQUIRED and user-supplied: it drives compaction budgets, and it
- * is never inferred from an external catalog.
+ * Provider model entry. Text providers (api_type != vercel-compatible-gateway)
+ * carry only text models: `context_limit` (> 0) is REQUIRED and drives
+ * compaction budgets. The single `vercel-compatible-gateway` provider is a
+ * SUPERSET — it may carry text models (context_limit > 0) AND multimodal
+ * models used by tools (image/video/speech/transcription, context_limit 0);
+ * which capability a multimodal model serves is implied by the tool's config
+ * knob (image_model / video_model / tts_model / asr_model), not stored here.
  *
  * @generated from message agent.v1.ProviderModel
  */
@@ -329,21 +333,9 @@ export type ProviderModel = Message$1<"agent.v1.ProviderModel"> & {
      */
     name: string;
     /**
-     * Context window (tokens). REQUIRED (> 0) for text models (drives
-     * compaction budgets); ignored for generation models (image/video/speech).
-     *
      * @generated from field: int64 context_limit = 3;
      */
     contextLimit: bigint;
-    /**
-     * What the model generates: "text" (default, chat/vision), "image",
-     * "video", or "speech". Text models feed sessions; generation models are
-     * resolved by tools (image-generate / image-edit / video-generate /
-     * tts-generate) via the same provider registry.
-     *
-     * @generated from field: string capability = 4;
-     */
-    capability: string;
 };
 /**
  * Describes the message agent.v1.ProviderModel.
