@@ -116,6 +116,15 @@ export type Session = Message$1<"agent.v1.Session"> & {
      * @generated from field: int32 message_seq = 23;
      */
     messageSeq: number;
+    /**
+     * Generic grouping key for a session (free-form, tenant-scoped). Empty =
+     * ungrouped. A subsession records its parent's session name here, but the
+     * field is deliberately generic: any client may group sessions arbitrarily
+     * (project, workspace, task…). Not validated against an enum.
+     *
+     * @generated from field: string group = 24;
+     */
+    group: string;
 };
 /**
  * Describes the message agent.v1.Session.
@@ -648,6 +657,13 @@ export type CreateSessionRequest = Message$1<"agent.v1.CreateSessionRequest"> & 
      * @generated from field: string variant = 7;
      */
     variant: string;
+    /**
+     * Optional generic grouping key (empty = ungrouped). A subsession sets this
+     * to its parent session name.
+     *
+     * @generated from field: string group = 8;
+     */
+    group: string;
 };
 /**
  * Describes the message agent.v1.CreateSessionRequest.
@@ -1062,6 +1078,13 @@ export type UpdateSettingsRequest = Message$1<"agent.v1.UpdateSettingsRequest"> 
      * @generated from field: string variant = 7;
      */
     variant: string;
+    /**
+     * Generic grouping key (empty clears it). Included for completeness; the
+     * subsession flow sets it at creation time.
+     *
+     * @generated from field: optional string group = 8;
+     */
+    group?: string | undefined;
 };
 /**
  * Describes the message agent.v1.UpdateSettingsRequest.
@@ -1996,6 +2019,334 @@ export type HealthResponse = Message$1<"agent.v1.HealthResponse"> & {
  */
 export declare const HealthResponseSchema: GenMessage<HealthResponse>;
 /**
+ * Tenant is one isolation domain. `id` is the plaintext isolation key used on
+ * the wire (abc.<id>.<...>) and in the database.
+ *
+ * @generated from message agent.v1.Tenant
+ */
+export type Tenant = Message$1<"agent.v1.Tenant"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
+    /**
+     * A disabled tenant's tokens stop authenticating (fail-closed); its data is
+     * retained. Re-enable by clearing this flag.
+     *
+     * @generated from field: bool disabled = 3;
+     */
+    disabled: boolean;
+    /**
+     * @generated from field: string created_at = 4;
+     */
+    createdAt: string;
+    /**
+     * @generated from field: string updated_at = 5;
+     */
+    updatedAt: string;
+};
+/**
+ * Describes the message agent.v1.Tenant.
+ * Use `create(TenantSchema)` to create a new message.
+ */
+export declare const TenantSchema: GenMessage<Tenant>;
+/**
+ * TenantToken is a bearer credential minted for one tenant. The plaintext is
+ * returned ONLY at issue/rotate time; the server stores just its sha256.
+ *
+ * @generated from message agent.v1.TenantToken
+ */
+export type TenantToken = Message$1<"agent.v1.TenantToken"> & {
+    /**
+     * @generated from field: string token_id = 1;
+     */
+    tokenId: string;
+    /**
+     * @generated from field: string tenant_id = 2;
+     */
+    tenantId: string;
+    /**
+     * @generated from field: string label = 3;
+     */
+    label: string;
+    /**
+     * @generated from field: string created_at = 4;
+     */
+    createdAt: string;
+    /**
+     * @generated from field: string last_used_at = 5;
+     */
+    lastUsedAt: string;
+    /**
+     * @generated from field: bool revoked = 6;
+     */
+    revoked: boolean;
+};
+/**
+ * Describes the message agent.v1.TenantToken.
+ * Use `create(TenantTokenSchema)` to create a new message.
+ */
+export declare const TenantTokenSchema: GenMessage<TenantToken>;
+/**
+ * @generated from message agent.v1.ListTenantsRequest
+ */
+export type ListTenantsRequest = Message$1<"agent.v1.ListTenantsRequest"> & {};
+/**
+ * Describes the message agent.v1.ListTenantsRequest.
+ * Use `create(ListTenantsRequestSchema)` to create a new message.
+ */
+export declare const ListTenantsRequestSchema: GenMessage<ListTenantsRequest>;
+/**
+ * @generated from message agent.v1.ListTenantsResponse
+ */
+export type ListTenantsResponse = Message$1<"agent.v1.ListTenantsResponse"> & {
+    /**
+     * @generated from field: repeated agent.v1.Tenant tenants = 1;
+     */
+    tenants: Tenant[];
+};
+/**
+ * Describes the message agent.v1.ListTenantsResponse.
+ * Use `create(ListTenantsResponseSchema)` to create a new message.
+ */
+export declare const ListTenantsResponseSchema: GenMessage<ListTenantsResponse>;
+/**
+ * @generated from message agent.v1.CreateTenantRequest
+ */
+export type CreateTenantRequest = Message$1<"agent.v1.CreateTenantRequest"> & {
+    /**
+     * Plaintext tenant id: ^[A-Za-z0-9_-]{1,64}$.
+     *
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
+};
+/**
+ * Describes the message agent.v1.CreateTenantRequest.
+ * Use `create(CreateTenantRequestSchema)` to create a new message.
+ */
+export declare const CreateTenantRequestSchema: GenMessage<CreateTenantRequest>;
+/**
+ * @generated from message agent.v1.CreateTenantResponse
+ */
+export type CreateTenantResponse = Message$1<"agent.v1.CreateTenantResponse"> & {
+    /**
+     * @generated from field: agent.v1.Tenant tenant = 1;
+     */
+    tenant?: Tenant | undefined;
+    /**
+     * The bootstrap token minted for the new tenant (plaintext, shown once).
+     *
+     * @generated from field: string token = 2;
+     */
+    token: string;
+};
+/**
+ * Describes the message agent.v1.CreateTenantResponse.
+ * Use `create(CreateTenantResponseSchema)` to create a new message.
+ */
+export declare const CreateTenantResponseSchema: GenMessage<CreateTenantResponse>;
+/**
+ * @generated from message agent.v1.UpdateTenantRequest
+ */
+export type UpdateTenantRequest = Message$1<"agent.v1.UpdateTenantRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: optional string name = 2;
+     */
+    name?: string | undefined;
+    /**
+     * @generated from field: optional bool disabled = 3;
+     */
+    disabled?: boolean | undefined;
+};
+/**
+ * Describes the message agent.v1.UpdateTenantRequest.
+ * Use `create(UpdateTenantRequestSchema)` to create a new message.
+ */
+export declare const UpdateTenantRequestSchema: GenMessage<UpdateTenantRequest>;
+/**
+ * @generated from message agent.v1.UpdateTenantResponse
+ */
+export type UpdateTenantResponse = Message$1<"agent.v1.UpdateTenantResponse"> & {
+    /**
+     * @generated from field: agent.v1.Tenant tenant = 1;
+     */
+    tenant?: Tenant | undefined;
+};
+/**
+ * Describes the message agent.v1.UpdateTenantResponse.
+ * Use `create(UpdateTenantResponseSchema)` to create a new message.
+ */
+export declare const UpdateTenantResponseSchema: GenMessage<UpdateTenantResponse>;
+/**
+ * @generated from message agent.v1.DeleteTenantRequest
+ */
+export type DeleteTenantRequest = Message$1<"agent.v1.DeleteTenantRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+};
+/**
+ * Describes the message agent.v1.DeleteTenantRequest.
+ * Use `create(DeleteTenantRequestSchema)` to create a new message.
+ */
+export declare const DeleteTenantRequestSchema: GenMessage<DeleteTenantRequest>;
+/**
+ * @generated from message agent.v1.DeleteTenantResponse
+ */
+export type DeleteTenantResponse = Message$1<"agent.v1.DeleteTenantResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+};
+/**
+ * Describes the message agent.v1.DeleteTenantResponse.
+ * Use `create(DeleteTenantResponseSchema)` to create a new message.
+ */
+export declare const DeleteTenantResponseSchema: GenMessage<DeleteTenantResponse>;
+/**
+ * @generated from message agent.v1.IssueTenantTokenRequest
+ */
+export type IssueTenantTokenRequest = Message$1<"agent.v1.IssueTenantTokenRequest"> & {
+    /**
+     * @generated from field: string tenant_id = 1;
+     */
+    tenantId: string;
+    /**
+     * @generated from field: string label = 2;
+     */
+    label: string;
+};
+/**
+ * Describes the message agent.v1.IssueTenantTokenRequest.
+ * Use `create(IssueTenantTokenRequestSchema)` to create a new message.
+ */
+export declare const IssueTenantTokenRequestSchema: GenMessage<IssueTenantTokenRequest>;
+/**
+ * @generated from message agent.v1.IssueTenantTokenResponse
+ */
+export type IssueTenantTokenResponse = Message$1<"agent.v1.IssueTenantTokenResponse"> & {
+    /**
+     * @generated from field: agent.v1.TenantToken token = 1;
+     */
+    token?: TenantToken | undefined;
+    /**
+     * The plaintext token (shown once; never retrievable again).
+     *
+     * @generated from field: string plaintext = 2;
+     */
+    plaintext: string;
+};
+/**
+ * Describes the message agent.v1.IssueTenantTokenResponse.
+ * Use `create(IssueTenantTokenResponseSchema)` to create a new message.
+ */
+export declare const IssueTenantTokenResponseSchema: GenMessage<IssueTenantTokenResponse>;
+/**
+ * @generated from message agent.v1.ListTenantTokensRequest
+ */
+export type ListTenantTokensRequest = Message$1<"agent.v1.ListTenantTokensRequest"> & {
+    /**
+     * @generated from field: string tenant_id = 1;
+     */
+    tenantId: string;
+};
+/**
+ * Describes the message agent.v1.ListTenantTokensRequest.
+ * Use `create(ListTenantTokensRequestSchema)` to create a new message.
+ */
+export declare const ListTenantTokensRequestSchema: GenMessage<ListTenantTokensRequest>;
+/**
+ * @generated from message agent.v1.ListTenantTokensResponse
+ */
+export type ListTenantTokensResponse = Message$1<"agent.v1.ListTenantTokensResponse"> & {
+    /**
+     * @generated from field: repeated agent.v1.TenantToken tokens = 1;
+     */
+    tokens: TenantToken[];
+};
+/**
+ * Describes the message agent.v1.ListTenantTokensResponse.
+ * Use `create(ListTenantTokensResponseSchema)` to create a new message.
+ */
+export declare const ListTenantTokensResponseSchema: GenMessage<ListTenantTokensResponse>;
+/**
+ * @generated from message agent.v1.RevokeTenantTokenRequest
+ */
+export type RevokeTenantTokenRequest = Message$1<"agent.v1.RevokeTenantTokenRequest"> & {
+    /**
+     * @generated from field: string token_id = 1;
+     */
+    tokenId: string;
+};
+/**
+ * Describes the message agent.v1.RevokeTenantTokenRequest.
+ * Use `create(RevokeTenantTokenRequestSchema)` to create a new message.
+ */
+export declare const RevokeTenantTokenRequestSchema: GenMessage<RevokeTenantTokenRequest>;
+/**
+ * @generated from message agent.v1.RevokeTenantTokenResponse
+ */
+export type RevokeTenantTokenResponse = Message$1<"agent.v1.RevokeTenantTokenResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+};
+/**
+ * Describes the message agent.v1.RevokeTenantTokenResponse.
+ * Use `create(RevokeTenantTokenResponseSchema)` to create a new message.
+ */
+export declare const RevokeTenantTokenResponseSchema: GenMessage<RevokeTenantTokenResponse>;
+/**
+ * @generated from message agent.v1.RotateTenantTokenRequest
+ */
+export type RotateTenantTokenRequest = Message$1<"agent.v1.RotateTenantTokenRequest"> & {
+    /**
+     * @generated from field: string token_id = 1;
+     */
+    tokenId: string;
+};
+/**
+ * Describes the message agent.v1.RotateTenantTokenRequest.
+ * Use `create(RotateTenantTokenRequestSchema)` to create a new message.
+ */
+export declare const RotateTenantTokenRequestSchema: GenMessage<RotateTenantTokenRequest>;
+/**
+ * @generated from message agent.v1.RotateTenantTokenResponse
+ */
+export type RotateTenantTokenResponse = Message$1<"agent.v1.RotateTenantTokenResponse"> & {
+    /**
+     * @generated from field: agent.v1.TenantToken token = 1;
+     */
+    token?: TenantToken | undefined;
+    /**
+     * The new plaintext token (shown once).
+     *
+     * @generated from field: string plaintext = 2;
+     */
+    plaintext: string;
+};
+/**
+ * Describes the message agent.v1.RotateTenantTokenResponse.
+ * Use `create(RotateTenantTokenResponseSchema)` to create a new message.
+ */
+export declare const RotateTenantTokenResponseSchema: GenMessage<RotateTenantTokenResponse>;
+/**
  * AgentService is the session-backend API.
  *
  * @generated from service agent.v1.AgentService
@@ -2320,5 +2671,77 @@ export declare const AgentService: GenService<{
         methodKind: "unary";
         input: typeof GetAgentConfigRequestSchema;
         output: typeof GetAgentConfigResponseSchema;
+    };
+}>;
+/**
+ * AdminService manages tenants and their tokens. All RPCs require the static
+ * admin bearer token and are never reachable with a tenant token.
+ *
+ * @generated from service agent.v1.AdminService
+ */
+export declare const AdminService: GenService<{
+    /**
+     * @generated from rpc agent.v1.AdminService.ListTenants
+     */
+    listTenants: {
+        methodKind: "unary";
+        input: typeof ListTenantsRequestSchema;
+        output: typeof ListTenantsResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AdminService.CreateTenant
+     */
+    createTenant: {
+        methodKind: "unary";
+        input: typeof CreateTenantRequestSchema;
+        output: typeof CreateTenantResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AdminService.UpdateTenant
+     */
+    updateTenant: {
+        methodKind: "unary";
+        input: typeof UpdateTenantRequestSchema;
+        output: typeof UpdateTenantResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AdminService.DeleteTenant
+     */
+    deleteTenant: {
+        methodKind: "unary";
+        input: typeof DeleteTenantRequestSchema;
+        output: typeof DeleteTenantResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AdminService.IssueTenantToken
+     */
+    issueTenantToken: {
+        methodKind: "unary";
+        input: typeof IssueTenantTokenRequestSchema;
+        output: typeof IssueTenantTokenResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AdminService.ListTenantTokens
+     */
+    listTenantTokens: {
+        methodKind: "unary";
+        input: typeof ListTenantTokensRequestSchema;
+        output: typeof ListTenantTokensResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AdminService.RevokeTenantToken
+     */
+    revokeTenantToken: {
+        methodKind: "unary";
+        input: typeof RevokeTenantTokenRequestSchema;
+        output: typeof RevokeTenantTokenResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AdminService.RotateTenantToken
+     */
+    rotateTenantToken: {
+        methodKind: "unary";
+        input: typeof RotateTenantTokenRequestSchema;
+        output: typeof RotateTenantTokenResponseSchema;
     };
 }>;
