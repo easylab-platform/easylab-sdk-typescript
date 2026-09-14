@@ -1070,6 +1070,21 @@ export type ServiceInfo = Message<"easylab.v1.ServiceInfo"> & {
      * @generated from field: string phase = 13;
      */
     phase: string;
+    /**
+     * Owning user id and repository coordinates (ownership labels). Empty for a
+     * standalone service (owned by its creator only).
+     *
+     * @generated from field: string owner = 14;
+     */
+    owner: string;
+    /**
+     * @generated from field: string org = 15;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 16;
+     */
+    repo: string;
 };
 /**
  * Describes the message easylab.v1.ServiceInfo.
@@ -1553,105 +1568,6 @@ export type SandboxJobKillResponse = Message<"easylab.v1.SandboxJobKillResponse"
  */
 export declare const SandboxJobKillResponseSchema: GenMessage<SandboxJobKillResponse>;
 /**
- * @generated from message easylab.v1.TaskLogRequest
- */
-export type TaskLogRequest = Message<"easylab.v1.TaskLogRequest"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
-};
-/**
- * Describes the message easylab.v1.TaskLogRequest.
- * Use `create(TaskLogRequestSchema)` to create a new message.
- */
-export declare const TaskLogRequestSchema: GenMessage<TaskLogRequest>;
-/**
- * @generated from message easylab.v1.ListTasksRequest
- */
-export type ListTasksRequest = Message<"easylab.v1.ListTasksRequest"> & {};
-/**
- * Describes the message easylab.v1.ListTasksRequest.
- * Use `create(ListTasksRequestSchema)` to create a new message.
- */
-export declare const ListTasksRequestSchema: GenMessage<ListTasksRequest>;
-/**
- * @generated from message easylab.v1.TaskEntry
- */
-export type TaskEntry = Message<"easylab.v1.TaskEntry"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
-    /**
-     * @generated from field: string kind = 2;
-     */
-    kind: string;
-    /**
-     * @generated from field: string state = 3;
-     */
-    state: string;
-    /**
-     * @generated from field: string session = 4;
-     */
-    session: string;
-    /**
-     * @generated from field: string command = 5;
-     */
-    command: string;
-    /**
-     * @generated from field: string created_at = 6;
-     */
-    createdAt: string;
-};
-/**
- * Describes the message easylab.v1.TaskEntry.
- * Use `create(TaskEntrySchema)` to create a new message.
- */
-export declare const TaskEntrySchema: GenMessage<TaskEntry>;
-/**
- * @generated from message easylab.v1.ListTasksResponse
- */
-export type ListTasksResponse = Message<"easylab.v1.ListTasksResponse"> & {
-    /**
-     * @generated from field: repeated easylab.v1.TaskEntry tasks = 1;
-     */
-    tasks: TaskEntry[];
-};
-/**
- * Describes the message easylab.v1.ListTasksResponse.
- * Use `create(ListTasksResponseSchema)` to create a new message.
- */
-export declare const ListTasksResponseSchema: GenMessage<ListTasksResponse>;
-/**
- * @generated from message easylab.v1.GetTaskRequest
- */
-export type GetTaskRequest = Message<"easylab.v1.GetTaskRequest"> & {
-    /**
-     * @generated from field: string id = 1;
-     */
-    id: string;
-};
-/**
- * Describes the message easylab.v1.GetTaskRequest.
- * Use `create(GetTaskRequestSchema)` to create a new message.
- */
-export declare const GetTaskRequestSchema: GenMessage<GetTaskRequest>;
-/**
- * @generated from message easylab.v1.GetTaskResponse
- */
-export type GetTaskResponse = Message<"easylab.v1.GetTaskResponse"> & {
-    /**
-     * @generated from field: easylab.v1.TaskEntry task = 1;
-     */
-    task?: TaskEntry | undefined;
-};
-/**
- * Describes the message easylab.v1.GetTaskResponse.
- * Use `create(GetTaskResponseSchema)` to create a new message.
- */
-export declare const GetTaskResponseSchema: GenMessage<GetTaskResponse>;
-/**
  * @generated from message easylab.v1.OpsStatusRequest
  */
 export type OpsStatusRequest = Message<"easylab.v1.OpsStatusRequest"> & {};
@@ -1832,12 +1748,66 @@ export type PackageInfo = Message<"easylab.v1.PackageInfo"> & {
      * @generated from field: repeated easylab.v1.PackageVersion versions = 3;
      */
     versions: PackageVersion[];
+    /**
+     * Ownership visibility: "public" (default) or "private".
+     *
+     * @generated from field: string visibility = 4;
+     */
+    visibility: string;
+    /**
+     * Owning user id ("" when unclaimed, e.g. a pull-through cache entry).
+     *
+     * @generated from field: string owner = 5;
+     */
+    owner: string;
 };
 /**
  * Describes the message easylab.v1.PackageInfo.
  * Use `create(PackageInfoSchema)` to create a new message.
  */
 export declare const PackageInfoSchema: GenMessage<PackageInfo>;
+/**
+ * @generated from message easylab.v1.SetPackageVisibilityRequest
+ */
+export type SetPackageVisibilityRequest = Message<"easylab.v1.SetPackageVisibilityRequest"> & {
+    /**
+     * @generated from field: string type = 1;
+     */
+    type: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
+    /**
+     * public | private
+     *
+     * @generated from field: string visibility = 3;
+     */
+    visibility: string;
+};
+/**
+ * Describes the message easylab.v1.SetPackageVisibilityRequest.
+ * Use `create(SetPackageVisibilityRequestSchema)` to create a new message.
+ */
+export declare const SetPackageVisibilityRequestSchema: GenMessage<SetPackageVisibilityRequest>;
+/**
+ * @generated from message easylab.v1.SetPackageVisibilityResponse
+ */
+export type SetPackageVisibilityResponse = Message<"easylab.v1.SetPackageVisibilityResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.SetPackageVisibilityResponse.
+ * Use `create(SetPackageVisibilityResponseSchema)` to create a new message.
+ */
+export declare const SetPackageVisibilityResponseSchema: GenMessage<SetPackageVisibilityResponse>;
 /**
  * @generated from message easylab.v1.ListPackagesRequest
  */
@@ -2360,26 +2330,6 @@ export type SyncResponse = Message<"easylab.v1.SyncResponse"> & {
  */
 export declare const SyncResponseSchema: GenMessage<SyncResponse>;
 /**
- * @generated from message easylab.v1.TaskLogResponse
- */
-export type TaskLogResponse = Message<"easylab.v1.TaskLogResponse"> & {
-    /**
-     * stdout | stderr | state
-     *
-     * @generated from field: string stream = 1;
-     */
-    stream: string;
-    /**
-     * @generated from field: string line = 2;
-     */
-    line: string;
-};
-/**
- * Describes the message easylab.v1.TaskLogResponse.
- * Use `create(TaskLogResponseSchema)` to create a new message.
- */
-export declare const TaskLogResponseSchema: GenMessage<TaskLogResponse>;
-/**
  * @generated from message easylab.v1.DeleteOrgRequest
  */
 export type DeleteOrgRequest = Message<"easylab.v1.DeleteOrgRequest"> & {
@@ -2813,6 +2763,1281 @@ export type OCICatalogResponse = Message<"easylab.v1.OCICatalogResponse"> & {
  */
 export declare const OCICatalogResponseSchema: GenMessage<OCICatalogResponse>;
 /**
+ * UpdateRepo patches a repository's hosting metadata (owner-only fields like
+ * visibility are authorized server-side).
+ *
+ * @generated from message easylab.v1.UpdateRepoRequest
+ */
+export type UpdateRepoRequest = Message<"easylab.v1.UpdateRepoRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: optional string description = 3;
+     */
+    description?: string | undefined;
+    /**
+     * public | private
+     *
+     * @generated from field: optional string visibility = 4;
+     */
+    visibility?: string | undefined;
+    /**
+     * @generated from field: optional string default_branch = 5;
+     */
+    defaultBranch?: string | undefined;
+};
+/**
+ * Describes the message easylab.v1.UpdateRepoRequest.
+ * Use `create(UpdateRepoRequestSchema)` to create a new message.
+ */
+export declare const UpdateRepoRequestSchema: GenMessage<UpdateRepoRequest>;
+/**
+ * @generated from message easylab.v1.UpdateRepoResponse
+ */
+export type UpdateRepoResponse = Message<"easylab.v1.UpdateRepoResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.UpdateRepoResponse.
+ * Use `create(UpdateRepoResponseSchema)` to create a new message.
+ */
+export declare const UpdateRepoResponseSchema: GenMessage<UpdateRepoResponse>;
+/**
+ * Repo permission roles (a user IS the ownership boundary; owner comes from
+ * the namespace owner, maintainer/developer are explicit grants).
+ *
+ * @generated from message easylab.v1.RepoMember
+ */
+export type RepoMember = Message<"easylab.v1.RepoMember"> & {
+    /**
+     * @generated from field: string username = 1;
+     */
+    username: string;
+    /**
+     * owner | maintainer | developer
+     *
+     * @generated from field: string role = 2;
+     */
+    role: string;
+};
+/**
+ * Describes the message easylab.v1.RepoMember.
+ * Use `create(RepoMemberSchema)` to create a new message.
+ */
+export declare const RepoMemberSchema: GenMessage<RepoMember>;
+/**
+ * @generated from message easylab.v1.ListRepoMembersRequest
+ */
+export type ListRepoMembersRequest = Message<"easylab.v1.ListRepoMembersRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+};
+/**
+ * Describes the message easylab.v1.ListRepoMembersRequest.
+ * Use `create(ListRepoMembersRequestSchema)` to create a new message.
+ */
+export declare const ListRepoMembersRequestSchema: GenMessage<ListRepoMembersRequest>;
+/**
+ * @generated from message easylab.v1.ListRepoMembersResponse
+ */
+export type ListRepoMembersResponse = Message<"easylab.v1.ListRepoMembersResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.RepoMember members = 1;
+     */
+    members: RepoMember[];
+};
+/**
+ * Describes the message easylab.v1.ListRepoMembersResponse.
+ * Use `create(ListRepoMembersResponseSchema)` to create a new message.
+ */
+export declare const ListRepoMembersResponseSchema: GenMessage<ListRepoMembersResponse>;
+/**
+ * @generated from message easylab.v1.SetRepoMemberRequest
+ */
+export type SetRepoMemberRequest = Message<"easylab.v1.SetRepoMemberRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string username = 3;
+     */
+    username: string;
+    /**
+     * maintainer | developer (owner is the namespace owner)
+     *
+     * @generated from field: string role = 4;
+     */
+    role: string;
+};
+/**
+ * Describes the message easylab.v1.SetRepoMemberRequest.
+ * Use `create(SetRepoMemberRequestSchema)` to create a new message.
+ */
+export declare const SetRepoMemberRequestSchema: GenMessage<SetRepoMemberRequest>;
+/**
+ * @generated from message easylab.v1.SetRepoMemberResponse
+ */
+export type SetRepoMemberResponse = Message<"easylab.v1.SetRepoMemberResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.SetRepoMemberResponse.
+ * Use `create(SetRepoMemberResponseSchema)` to create a new message.
+ */
+export declare const SetRepoMemberResponseSchema: GenMessage<SetRepoMemberResponse>;
+/**
+ * @generated from message easylab.v1.RemoveRepoMemberRequest
+ */
+export type RemoveRepoMemberRequest = Message<"easylab.v1.RemoveRepoMemberRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string username = 3;
+     */
+    username: string;
+};
+/**
+ * Describes the message easylab.v1.RemoveRepoMemberRequest.
+ * Use `create(RemoveRepoMemberRequestSchema)` to create a new message.
+ */
+export declare const RemoveRepoMemberRequestSchema: GenMessage<RemoveRepoMemberRequest>;
+/**
+ * @generated from message easylab.v1.RemoveRepoMemberResponse
+ */
+export type RemoveRepoMemberResponse = Message<"easylab.v1.RemoveRepoMemberResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.RemoveRepoMemberResponse.
+ * Use `create(RemoveRepoMemberResponseSchema)` to create a new message.
+ */
+export declare const RemoveRepoMemberResponseSchema: GenMessage<RemoveRepoMemberResponse>;
+/**
+ * SetTag / DeleteTag manage immutable tag refs; DeleteBranch already exists.
+ *
+ * @generated from message easylab.v1.SetTagRequest
+ */
+export type SetTagRequest = Message<"easylab.v1.SetTagRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string name = 3;
+     */
+    name: string;
+    /**
+     * @generated from field: string target = 4;
+     */
+    target: string;
+};
+/**
+ * Describes the message easylab.v1.SetTagRequest.
+ * Use `create(SetTagRequestSchema)` to create a new message.
+ */
+export declare const SetTagRequestSchema: GenMessage<SetTagRequest>;
+/**
+ * @generated from message easylab.v1.SetTagResponse
+ */
+export type SetTagResponse = Message<"easylab.v1.SetTagResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.SetTagResponse.
+ * Use `create(SetTagResponseSchema)` to create a new message.
+ */
+export declare const SetTagResponseSchema: GenMessage<SetTagResponse>;
+/**
+ * @generated from message easylab.v1.DeleteTagRequest
+ */
+export type DeleteTagRequest = Message<"easylab.v1.DeleteTagRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string name = 3;
+     */
+    name: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteTagRequest.
+ * Use `create(DeleteTagRequestSchema)` to create a new message.
+ */
+export declare const DeleteTagRequestSchema: GenMessage<DeleteTagRequest>;
+/**
+ * @generated from message easylab.v1.DeleteTagResponse
+ */
+export type DeleteTagResponse = Message<"easylab.v1.DeleteTagResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteTagResponse.
+ * Use `create(DeleteTagResponseSchema)` to create a new message.
+ */
+export declare const DeleteTagResponseSchema: GenMessage<DeleteTagResponse>;
+/**
+ * FileChange is one atomic path action inside WriteFiles.
+ *
+ * @generated from message easylab.v1.FileChange
+ */
+export type FileChange = Message<"easylab.v1.FileChange"> & {
+    /**
+     * @generated from field: string path = 1;
+     */
+    path: string;
+    /**
+     * @generated from field: string content = 2;
+     */
+    content: string;
+    /**
+     * @generated from field: bytes raw = 3;
+     */
+    raw: Uint8Array;
+    /**
+     * @generated from field: bool delete = 4;
+     */
+    delete: boolean;
+};
+/**
+ * Describes the message easylab.v1.FileChange.
+ * Use `create(FileChangeSchema)` to create a new message.
+ */
+export declare const FileChangeSchema: GenMessage<FileChange>;
+/**
+ * WriteFiles commits one or more file changes onto a branch in a single
+ * revision (the REST /files endpoint's RPC form).
+ *
+ * @generated from message easylab.v1.WriteFilesRequest
+ */
+export type WriteFilesRequest = Message<"easylab.v1.WriteFilesRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string ref = 3;
+     */
+    ref: string;
+    /**
+     * @generated from field: string message = 4;
+     */
+    message: string;
+    /**
+     * @generated from field: repeated easylab.v1.FileChange changes = 5;
+     */
+    changes: FileChange[];
+    /**
+     * @generated from field: bool new_commit = 6;
+     */
+    newCommit: boolean;
+};
+/**
+ * Describes the message easylab.v1.WriteFilesRequest.
+ * Use `create(WriteFilesRequestSchema)` to create a new message.
+ */
+export declare const WriteFilesRequestSchema: GenMessage<WriteFilesRequest>;
+/**
+ * @generated from message easylab.v1.WriteFilesResponse
+ */
+export type WriteFilesResponse = Message<"easylab.v1.WriteFilesResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string revision_id = 3;
+     */
+    revisionId: string;
+    /**
+     * @generated from field: string change_id = 4;
+     */
+    changeId: string;
+};
+/**
+ * Describes the message easylab.v1.WriteFilesResponse.
+ * Use `create(WriteFilesResponseSchema)` to create a new message.
+ */
+export declare const WriteFilesResponseSchema: GenMessage<WriteFilesResponse>;
+/**
+ * Drop/Revert/Resolve/Squash/RebaseMany are the remaining history-edit ops.
+ *
+ * @generated from message easylab.v1.DropRequest
+ */
+export type DropRequest = Message<"easylab.v1.DropRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string rev = 3;
+     */
+    rev: string;
+};
+/**
+ * Describes the message easylab.v1.DropRequest.
+ * Use `create(DropRequestSchema)` to create a new message.
+ */
+export declare const DropRequestSchema: GenMessage<DropRequest>;
+/**
+ * @generated from message easylab.v1.DropResponse
+ */
+export type DropResponse = Message<"easylab.v1.DropResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string revision_id = 3;
+     */
+    revisionId: string;
+    /**
+     * @generated from field: string change_id = 4;
+     */
+    changeId: string;
+};
+/**
+ * Describes the message easylab.v1.DropResponse.
+ * Use `create(DropResponseSchema)` to create a new message.
+ */
+export declare const DropResponseSchema: GenMessage<DropResponse>;
+/**
+ * @generated from message easylab.v1.RevertRequest
+ */
+export type RevertRequest = Message<"easylab.v1.RevertRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string rev = 3;
+     */
+    rev: string;
+    /**
+     * @generated from field: string target = 4;
+     */
+    target: string;
+};
+/**
+ * Describes the message easylab.v1.RevertRequest.
+ * Use `create(RevertRequestSchema)` to create a new message.
+ */
+export declare const RevertRequestSchema: GenMessage<RevertRequest>;
+/**
+ * @generated from message easylab.v1.RevertResponse
+ */
+export type RevertResponse = Message<"easylab.v1.RevertResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string revision_id = 3;
+     */
+    revisionId: string;
+    /**
+     * @generated from field: string change_id = 4;
+     */
+    changeId: string;
+};
+/**
+ * Describes the message easylab.v1.RevertResponse.
+ * Use `create(RevertResponseSchema)` to create a new message.
+ */
+export declare const RevertResponseSchema: GenMessage<RevertResponse>;
+/**
+ * @generated from message easylab.v1.ResolveRequest
+ */
+export type ResolveRequest = Message<"easylab.v1.ResolveRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string path = 3;
+     */
+    path: string;
+    /**
+     * @generated from field: string content = 4;
+     */
+    content: string;
+};
+/**
+ * Describes the message easylab.v1.ResolveRequest.
+ * Use `create(ResolveRequestSchema)` to create a new message.
+ */
+export declare const ResolveRequestSchema: GenMessage<ResolveRequest>;
+/**
+ * @generated from message easylab.v1.ResolveResponse
+ */
+export type ResolveResponse = Message<"easylab.v1.ResolveResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string revision_id = 3;
+     */
+    revisionId: string;
+    /**
+     * @generated from field: string change_id = 4;
+     */
+    changeId: string;
+};
+/**
+ * Describes the message easylab.v1.ResolveResponse.
+ * Use `create(ResolveResponseSchema)` to create a new message.
+ */
+export declare const ResolveResponseSchema: GenMessage<ResolveResponse>;
+/**
+ * @generated from message easylab.v1.SquashRequest
+ */
+export type SquashRequest = Message<"easylab.v1.SquashRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string rev = 3;
+     */
+    rev: string;
+    /**
+     * @generated from field: string message = 4;
+     */
+    message: string;
+};
+/**
+ * Describes the message easylab.v1.SquashRequest.
+ * Use `create(SquashRequestSchema)` to create a new message.
+ */
+export declare const SquashRequestSchema: GenMessage<SquashRequest>;
+/**
+ * @generated from message easylab.v1.SquashResponse
+ */
+export type SquashResponse = Message<"easylab.v1.SquashResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string revision_id = 3;
+     */
+    revisionId: string;
+    /**
+     * @generated from field: string change_id = 4;
+     */
+    changeId: string;
+};
+/**
+ * Describes the message easylab.v1.SquashResponse.
+ * Use `create(SquashResponseSchema)` to create a new message.
+ */
+export declare const SquashResponseSchema: GenMessage<SquashResponse>;
+/**
+ * @generated from message easylab.v1.RebaseManyRequest
+ */
+export type RebaseManyRequest = Message<"easylab.v1.RebaseManyRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: repeated string revs = 3;
+     */
+    revs: string[];
+    /**
+     * @generated from field: string onto = 4;
+     */
+    onto: string;
+};
+/**
+ * Describes the message easylab.v1.RebaseManyRequest.
+ * Use `create(RebaseManyRequestSchema)` to create a new message.
+ */
+export declare const RebaseManyRequestSchema: GenMessage<RebaseManyRequest>;
+/**
+ * @generated from message easylab.v1.RebaseManyResponse
+ */
+export type RebaseManyResponse = Message<"easylab.v1.RebaseManyResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.RebaseManyResponse.
+ * Use `create(RebaseManyResponseSchema)` to create a new message.
+ */
+export declare const RebaseManyResponseSchema: GenMessage<RebaseManyResponse>;
+/**
+ * Releases (write side; List/Download already exist).
+ *
+ * @generated from message easylab.v1.CreateReleaseRequest
+ */
+export type CreateReleaseRequest = Message<"easylab.v1.CreateReleaseRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string tag = 3;
+     */
+    tag: string;
+    /**
+     * @generated from field: string name = 4;
+     */
+    name: string;
+    /**
+     * @generated from field: string description = 5;
+     */
+    description: string;
+    /**
+     * @generated from field: bool draft = 6;
+     */
+    draft: boolean;
+    /**
+     * @generated from field: bool prerelease = 7;
+     */
+    prerelease: boolean;
+    /**
+     * @generated from field: string target = 8;
+     */
+    target: string;
+};
+/**
+ * Describes the message easylab.v1.CreateReleaseRequest.
+ * Use `create(CreateReleaseRequestSchema)` to create a new message.
+ */
+export declare const CreateReleaseRequestSchema: GenMessage<CreateReleaseRequest>;
+/**
+ * @generated from message easylab.v1.CreateReleaseResponse
+ */
+export type CreateReleaseResponse = Message<"easylab.v1.CreateReleaseResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string tag = 3;
+     */
+    tag: string;
+};
+/**
+ * Describes the message easylab.v1.CreateReleaseResponse.
+ * Use `create(CreateReleaseResponseSchema)` to create a new message.
+ */
+export declare const CreateReleaseResponseSchema: GenMessage<CreateReleaseResponse>;
+/**
+ * @generated from message easylab.v1.UploadReleaseAssetRequest
+ */
+export type UploadReleaseAssetRequest = Message<"easylab.v1.UploadReleaseAssetRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string tag = 3;
+     */
+    tag: string;
+    /**
+     * @generated from field: string name = 4;
+     */
+    name: string;
+    /**
+     * @generated from field: bytes data = 5;
+     */
+    data: Uint8Array;
+    /**
+     * @generated from field: string content_type = 6;
+     */
+    contentType: string;
+};
+/**
+ * Describes the message easylab.v1.UploadReleaseAssetRequest.
+ * Use `create(UploadReleaseAssetRequestSchema)` to create a new message.
+ */
+export declare const UploadReleaseAssetRequestSchema: GenMessage<UploadReleaseAssetRequest>;
+/**
+ * @generated from message easylab.v1.UploadReleaseAssetResponse
+ */
+export type UploadReleaseAssetResponse = Message<"easylab.v1.UploadReleaseAssetResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string name = 3;
+     */
+    name: string;
+};
+/**
+ * Describes the message easylab.v1.UploadReleaseAssetResponse.
+ * Use `create(UploadReleaseAssetResponseSchema)` to create a new message.
+ */
+export declare const UploadReleaseAssetResponseSchema: GenMessage<UploadReleaseAssetResponse>;
+/**
+ * @generated from message easylab.v1.DeleteReleaseRequest
+ */
+export type DeleteReleaseRequest = Message<"easylab.v1.DeleteReleaseRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string tag = 3;
+     */
+    tag: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteReleaseRequest.
+ * Use `create(DeleteReleaseRequestSchema)` to create a new message.
+ */
+export declare const DeleteReleaseRequestSchema: GenMessage<DeleteReleaseRequest>;
+/**
+ * @generated from message easylab.v1.DeleteReleaseResponse
+ */
+export type DeleteReleaseResponse = Message<"easylab.v1.DeleteReleaseResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteReleaseResponse.
+ * Use `create(DeleteReleaseResponseSchema)` to create a new message.
+ */
+export declare const DeleteReleaseResponseSchema: GenMessage<DeleteReleaseResponse>;
+/**
+ * Merge requests (fork→upstream change requests).
+ *
+ * @generated from message easylab.v1.MergeRequest
+ */
+export type MergeRequest = Message<"easylab.v1.MergeRequest"> & {
+    /**
+     * @generated from field: string iid = 1;
+     */
+    iid: string;
+    /**
+     * @generated from field: string title = 2;
+     */
+    title: string;
+    /**
+     * @generated from field: string description = 3;
+     */
+    description: string;
+    /**
+     * @generated from field: string source = 4;
+     */
+    source: string;
+    /**
+     * @generated from field: string target = 5;
+     */
+    target: string;
+    /**
+     * @generated from field: string state = 6;
+     */
+    state: string;
+    /**
+     * @generated from field: string author = 7;
+     */
+    author: string;
+    /**
+     * @generated from field: string created_at = 8;
+     */
+    createdAt: string;
+    /**
+     * @generated from field: string updated_at = 9;
+     */
+    updatedAt: string;
+};
+/**
+ * Describes the message easylab.v1.MergeRequest.
+ * Use `create(MergeRequestSchema)` to create a new message.
+ */
+export declare const MergeRequestSchema: GenMessage<MergeRequest>;
+/**
+ * @generated from message easylab.v1.ListMergeRequestsRequest
+ */
+export type ListMergeRequestsRequest = Message<"easylab.v1.ListMergeRequestsRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string state = 3;
+     */
+    state: string;
+};
+/**
+ * Describes the message easylab.v1.ListMergeRequestsRequest.
+ * Use `create(ListMergeRequestsRequestSchema)` to create a new message.
+ */
+export declare const ListMergeRequestsRequestSchema: GenMessage<ListMergeRequestsRequest>;
+/**
+ * @generated from message easylab.v1.ListMergeRequestsResponse
+ */
+export type ListMergeRequestsResponse = Message<"easylab.v1.ListMergeRequestsResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.MergeRequest merge_requests = 1;
+     */
+    mergeRequests: MergeRequest[];
+};
+/**
+ * Describes the message easylab.v1.ListMergeRequestsResponse.
+ * Use `create(ListMergeRequestsResponseSchema)` to create a new message.
+ */
+export declare const ListMergeRequestsResponseSchema: GenMessage<ListMergeRequestsResponse>;
+/**
+ * @generated from message easylab.v1.GetMergeRequestRequest
+ */
+export type GetMergeRequestRequest = Message<"easylab.v1.GetMergeRequestRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string iid = 3;
+     */
+    iid: string;
+};
+/**
+ * Describes the message easylab.v1.GetMergeRequestRequest.
+ * Use `create(GetMergeRequestRequestSchema)` to create a new message.
+ */
+export declare const GetMergeRequestRequestSchema: GenMessage<GetMergeRequestRequest>;
+/**
+ * @generated from message easylab.v1.GetMergeRequestResponse
+ */
+export type GetMergeRequestResponse = Message<"easylab.v1.GetMergeRequestResponse"> & {
+    /**
+     * @generated from field: easylab.v1.MergeRequest merge_request = 1;
+     */
+    mergeRequest?: MergeRequest | undefined;
+};
+/**
+ * Describes the message easylab.v1.GetMergeRequestResponse.
+ * Use `create(GetMergeRequestResponseSchema)` to create a new message.
+ */
+export declare const GetMergeRequestResponseSchema: GenMessage<GetMergeRequestResponse>;
+/**
+ * @generated from message easylab.v1.CreateMergeRequestRequest
+ */
+export type CreateMergeRequestRequest = Message<"easylab.v1.CreateMergeRequestRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string title = 3;
+     */
+    title: string;
+    /**
+     * @generated from field: string description = 4;
+     */
+    description: string;
+    /**
+     * @generated from field: string source = 5;
+     */
+    source: string;
+    /**
+     * @generated from field: string target = 6;
+     */
+    target: string;
+};
+/**
+ * Describes the message easylab.v1.CreateMergeRequestRequest.
+ * Use `create(CreateMergeRequestRequestSchema)` to create a new message.
+ */
+export declare const CreateMergeRequestRequestSchema: GenMessage<CreateMergeRequestRequest>;
+/**
+ * @generated from message easylab.v1.CreateMergeRequestResponse
+ */
+export type CreateMergeRequestResponse = Message<"easylab.v1.CreateMergeRequestResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: easylab.v1.MergeRequest merge_request = 3;
+     */
+    mergeRequest?: MergeRequest | undefined;
+};
+/**
+ * Describes the message easylab.v1.CreateMergeRequestResponse.
+ * Use `create(CreateMergeRequestResponseSchema)` to create a new message.
+ */
+export declare const CreateMergeRequestResponseSchema: GenMessage<CreateMergeRequestResponse>;
+/**
+ * @generated from message easylab.v1.UpdateMergeRequestRequest
+ */
+export type UpdateMergeRequestRequest = Message<"easylab.v1.UpdateMergeRequestRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string iid = 3;
+     */
+    iid: string;
+    /**
+     * @generated from field: string state = 4;
+     */
+    state: string;
+};
+/**
+ * Describes the message easylab.v1.UpdateMergeRequestRequest.
+ * Use `create(UpdateMergeRequestRequestSchema)` to create a new message.
+ */
+export declare const UpdateMergeRequestRequestSchema: GenMessage<UpdateMergeRequestRequest>;
+/**
+ * @generated from message easylab.v1.UpdateMergeRequestResponse
+ */
+export type UpdateMergeRequestResponse = Message<"easylab.v1.UpdateMergeRequestResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.UpdateMergeRequestResponse.
+ * Use `create(UpdateMergeRequestResponseSchema)` to create a new message.
+ */
+export declare const UpdateMergeRequestResponseSchema: GenMessage<UpdateMergeRequestResponse>;
+/**
+ * @generated from message easylab.v1.MergeMergeRequestRequest
+ */
+export type MergeMergeRequestRequest = Message<"easylab.v1.MergeMergeRequestRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string iid = 3;
+     */
+    iid: string;
+};
+/**
+ * Describes the message easylab.v1.MergeMergeRequestRequest.
+ * Use `create(MergeMergeRequestRequestSchema)` to create a new message.
+ */
+export declare const MergeMergeRequestRequestSchema: GenMessage<MergeMergeRequestRequest>;
+/**
+ * @generated from message easylab.v1.MergeMergeRequestResponse
+ */
+export type MergeMergeRequestResponse = Message<"easylab.v1.MergeMergeRequestResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: string revision_id = 3;
+     */
+    revisionId: string;
+    /**
+     * @generated from field: string snapshot = 4;
+     */
+    snapshot: string;
+    /**
+     * @generated from field: int32 conflicts = 5;
+     */
+    conflicts: number;
+};
+/**
+ * Describes the message easylab.v1.MergeMergeRequestResponse.
+ * Use `create(MergeMergeRequestResponseSchema)` to create a new message.
+ */
+export declare const MergeMergeRequestResponseSchema: GenMessage<MergeMergeRequestResponse>;
+/**
+ * @generated from message easylab.v1.MergeReview
+ */
+export type MergeReview = Message<"easylab.v1.MergeReview"> & {
+    /**
+     * @generated from field: string reviewer = 1;
+     */
+    reviewer: string;
+    /**
+     * @generated from field: string state = 2;
+     */
+    state: string;
+    /**
+     * @generated from field: string body = 3;
+     */
+    body: string;
+    /**
+     * @generated from field: string created_at = 4;
+     */
+    createdAt: string;
+};
+/**
+ * Describes the message easylab.v1.MergeReview.
+ * Use `create(MergeReviewSchema)` to create a new message.
+ */
+export declare const MergeReviewSchema: GenMessage<MergeReview>;
+/**
+ * @generated from message easylab.v1.ListReviewsRequest
+ */
+export type ListReviewsRequest = Message<"easylab.v1.ListReviewsRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string iid = 3;
+     */
+    iid: string;
+};
+/**
+ * Describes the message easylab.v1.ListReviewsRequest.
+ * Use `create(ListReviewsRequestSchema)` to create a new message.
+ */
+export declare const ListReviewsRequestSchema: GenMessage<ListReviewsRequest>;
+/**
+ * @generated from message easylab.v1.ListReviewsResponse
+ */
+export type ListReviewsResponse = Message<"easylab.v1.ListReviewsResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.MergeReview reviews = 1;
+     */
+    reviews: MergeReview[];
+};
+/**
+ * Describes the message easylab.v1.ListReviewsResponse.
+ * Use `create(ListReviewsResponseSchema)` to create a new message.
+ */
+export declare const ListReviewsResponseSchema: GenMessage<ListReviewsResponse>;
+/**
+ * @generated from message easylab.v1.AddReviewRequest
+ */
+export type AddReviewRequest = Message<"easylab.v1.AddReviewRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string iid = 3;
+     */
+    iid: string;
+    /**
+     * @generated from field: string state = 4;
+     */
+    state: string;
+    /**
+     * @generated from field: string body = 5;
+     */
+    body: string;
+};
+/**
+ * Describes the message easylab.v1.AddReviewRequest.
+ * Use `create(AddReviewRequestSchema)` to create a new message.
+ */
+export declare const AddReviewRequestSchema: GenMessage<AddReviewRequest>;
+/**
+ * @generated from message easylab.v1.AddReviewResponse
+ */
+export type AddReviewResponse = Message<"easylab.v1.AddReviewResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.AddReviewResponse.
+ * Use `create(AddReviewResponseSchema)` to create a new message.
+ */
+export declare const AddReviewResponseSchema: GenMessage<AddReviewResponse>;
+/**
+ * @generated from message easylab.v1.MergeComment
+ */
+export type MergeComment = Message<"easylab.v1.MergeComment"> & {
+    /**
+     * @generated from field: string author = 1;
+     */
+    author: string;
+    /**
+     * @generated from field: string body = 2;
+     */
+    body: string;
+    /**
+     * @generated from field: string path = 3;
+     */
+    path: string;
+    /**
+     * @generated from field: string created_at = 4;
+     */
+    createdAt: string;
+};
+/**
+ * Describes the message easylab.v1.MergeComment.
+ * Use `create(MergeCommentSchema)` to create a new message.
+ */
+export declare const MergeCommentSchema: GenMessage<MergeComment>;
+/**
+ * @generated from message easylab.v1.ListCommentsRequest
+ */
+export type ListCommentsRequest = Message<"easylab.v1.ListCommentsRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string iid = 3;
+     */
+    iid: string;
+};
+/**
+ * Describes the message easylab.v1.ListCommentsRequest.
+ * Use `create(ListCommentsRequestSchema)` to create a new message.
+ */
+export declare const ListCommentsRequestSchema: GenMessage<ListCommentsRequest>;
+/**
+ * @generated from message easylab.v1.ListCommentsResponse
+ */
+export type ListCommentsResponse = Message<"easylab.v1.ListCommentsResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.MergeComment comments = 1;
+     */
+    comments: MergeComment[];
+};
+/**
+ * Describes the message easylab.v1.ListCommentsResponse.
+ * Use `create(ListCommentsResponseSchema)` to create a new message.
+ */
+export declare const ListCommentsResponseSchema: GenMessage<ListCommentsResponse>;
+/**
+ * @generated from message easylab.v1.AddCommentRequest
+ */
+export type AddCommentRequest = Message<"easylab.v1.AddCommentRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string iid = 3;
+     */
+    iid: string;
+    /**
+     * @generated from field: string body = 4;
+     */
+    body: string;
+    /**
+     * @generated from field: string path = 5;
+     */
+    path: string;
+};
+/**
+ * Describes the message easylab.v1.AddCommentRequest.
+ * Use `create(AddCommentRequestSchema)` to create a new message.
+ */
+export declare const AddCommentRequestSchema: GenMessage<AddCommentRequest>;
+/**
+ * @generated from message easylab.v1.AddCommentResponse
+ */
+export type AddCommentResponse = Message<"easylab.v1.AddCommentResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.AddCommentResponse.
+ * Use `create(AddCommentResponseSchema)` to create a new message.
+ */
+export declare const AddCommentResponseSchema: GenMessage<AddCommentResponse>;
+/**
  * @generated from message easylab.v1.SandboxInfo
  */
 export type SandboxInfo = Message<"easylab.v1.SandboxInfo"> & {
@@ -2896,6 +4121,18 @@ export type SandboxInfo = Message<"easylab.v1.SandboxInfo"> & {
      * @generated from field: string error = 15;
      */
     error: string;
+    /**
+     * resolved runtime/profile (linux/windows/macos)
+     *
+     * @generated from field: string runtime = 16;
+     */
+    runtime: string;
+    /**
+     * Owning user id (sandboxes are owner-only). Empty when unknown/legacy.
+     *
+     * @generated from field: string owner = 17;
+     */
+    owner: string;
 };
 /**
  * Describes the message easylab.v1.SandboxInfo.
@@ -2961,6 +4198,12 @@ export type EnsureSandboxImageRequest = Message<"easylab.v1.EnsureSandboxImageRe
      * @generated from field: string base_image = 1;
      */
     baseImage: string;
+    /**
+     * "" / "linux" (derive base+worker) or "windows"/"macos"
+     *
+     * @generated from field: string runtime = 2;
+     */
+    runtime: string;
 };
 /**
  * Describes the message easylab.v1.EnsureSandboxImageRequest.
@@ -3033,6 +4276,13 @@ export type LaunchSandboxRequest = Message<"easylab.v1.LaunchSandboxRequest"> & 
      * @generated from field: uint64 memory_bytes = 9;
      */
     memoryBytes: bigint;
+    /**
+     * Execution runtime/profile: "" or "linux" (default; base image + injected
+     * worker), "windows"/"macos" (a VM-backed worker image served by easylab).
+     *
+     * @generated from field: string runtime = 10;
+     */
+    runtime: string;
 };
 /**
  * Describes the message easylab.v1.LaunchSandboxRequest.
@@ -3311,6 +4561,197 @@ export type FileListRequest = Message<"easylab.v1.FileListRequest"> & {
  * Use `create(FileListRequestSchema)` to create a new message.
  */
 export declare const FileListRequestSchema: GenMessage<FileListRequest>;
+/**
+ * @generated from message easylab.v1.RegisterExternalSandboxRequest
+ */
+export type RegisterExternalSandboxRequest = Message<"easylab.v1.RegisterExternalSandboxRequest"> & {
+    /**
+     * registry key for this sandbox
+     *
+     * @generated from field: string name = 1;
+     */
+    name: string;
+    /**
+     * worker base URL (e.g. http://host:8080)
+     *
+     * @generated from field: string addr = 2;
+     */
+    addr: string;
+    /**
+     * one-time enrollment code (claim path; exclusive)
+     *
+     * @generated from field: string code = 3;
+     */
+    code: string;
+    /**
+     * pre-provisioned bearer token (alternative to code)
+     *
+     * @generated from field: string token = 4;
+     */
+    token: string;
+    /**
+     * optional workspace coords (empty = standalone)
+     *
+     * @generated from field: string org = 5;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 6;
+     */
+    repo: string;
+    /**
+     * @generated from field: string branch = 7;
+     */
+    branch: string;
+    /**
+     * optional caller identity recorded for audit
+     *
+     * @generated from field: string owner = 8;
+     */
+    owner: string;
+};
+/**
+ * Describes the message easylab.v1.RegisterExternalSandboxRequest.
+ * Use `create(RegisterExternalSandboxRequestSchema)` to create a new message.
+ */
+export declare const RegisterExternalSandboxRequestSchema: GenMessage<RegisterExternalSandboxRequest>;
+/**
+ * @generated from message easylab.v1.RegisterExternalSandboxResponse
+ */
+export type RegisterExternalSandboxResponse = Message<"easylab.v1.RegisterExternalSandboxResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * the active bearer token (issued or echoed)
+     *
+     * @generated from field: string token = 2;
+     */
+    token: string;
+    /**
+     * @generated from field: string error = 3;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.RegisterExternalSandboxResponse.
+ * Use `create(RegisterExternalSandboxResponseSchema)` to create a new message.
+ */
+export declare const RegisterExternalSandboxResponseSchema: GenMessage<RegisterExternalSandboxResponse>;
+/**
+ * @generated from message easylab.v1.ListExternalSandboxesRequest
+ */
+export type ListExternalSandboxesRequest = Message<"easylab.v1.ListExternalSandboxesRequest"> & {};
+/**
+ * Describes the message easylab.v1.ListExternalSandboxesRequest.
+ * Use `create(ListExternalSandboxesRequestSchema)` to create a new message.
+ */
+export declare const ListExternalSandboxesRequestSchema: GenMessage<ListExternalSandboxesRequest>;
+/**
+ * @generated from message easylab.v1.ExternalSandbox
+ */
+export type ExternalSandbox = Message<"easylab.v1.ExternalSandbox"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+    /**
+     * @generated from field: string addr = 2;
+     */
+    addr: string;
+    /**
+     * @generated from field: string org = 3;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 4;
+     */
+    repo: string;
+    /**
+     * @generated from field: string branch = 5;
+     */
+    branch: string;
+    /**
+     * @generated from field: string owner = 6;
+     */
+    owner: string;
+    /**
+     * @generated from field: string synced_rev = 7;
+     */
+    syncedRev: string;
+    /**
+     * @generated from field: string synced_boot_id = 8;
+     */
+    syncedBootId: string;
+    /**
+     * worker answered Info with the stored token
+     *
+     * @generated from field: bool reachable = 9;
+     */
+    reachable: boolean;
+    /**
+     * @generated from field: string error = 10;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.ExternalSandbox.
+ * Use `create(ExternalSandboxSchema)` to create a new message.
+ */
+export declare const ExternalSandboxSchema: GenMessage<ExternalSandbox>;
+/**
+ * @generated from message easylab.v1.ListExternalSandboxesResponse
+ */
+export type ListExternalSandboxesResponse = Message<"easylab.v1.ListExternalSandboxesResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.ExternalSandbox sandboxes = 1;
+     */
+    sandboxes: ExternalSandbox[];
+};
+/**
+ * Describes the message easylab.v1.ListExternalSandboxesResponse.
+ * Use `create(ListExternalSandboxesResponseSchema)` to create a new message.
+ */
+export declare const ListExternalSandboxesResponseSchema: GenMessage<ListExternalSandboxesResponse>;
+/**
+ * @generated from message easylab.v1.ReleaseExternalSandboxRequest
+ */
+export type ReleaseExternalSandboxRequest = Message<"easylab.v1.ReleaseExternalSandboxRequest"> & {
+    /**
+     * @generated from field: string name = 1;
+     */
+    name: string;
+};
+/**
+ * Describes the message easylab.v1.ReleaseExternalSandboxRequest.
+ * Use `create(ReleaseExternalSandboxRequestSchema)` to create a new message.
+ */
+export declare const ReleaseExternalSandboxRequestSchema: GenMessage<ReleaseExternalSandboxRequest>;
+/**
+ * @generated from message easylab.v1.ReleaseExternalSandboxResponse
+ */
+export type ReleaseExternalSandboxResponse = Message<"easylab.v1.ReleaseExternalSandboxResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * fresh one-time code for re-claiming ("" if not releasable)
+     *
+     * @generated from field: string code = 2;
+     */
+    code: string;
+    /**
+     * @generated from field: string error = 3;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.ReleaseExternalSandboxResponse.
+ * Use `create(ReleaseExternalSandboxResponseSchema)` to create a new message.
+ */
+export declare const ReleaseExternalSandboxResponseSchema: GenMessage<ReleaseExternalSandboxResponse>;
 /**
  * @generated from message easylab.v1.Runner
  */
@@ -3912,6 +5353,390 @@ export type ListRunnersResponse = Message<"easylab.v1.ListRunnersResponse"> & {
  */
 export declare const ListRunnersResponseSchema: GenMessage<ListRunnersResponse>;
 /**
+ * @generated from message easylab.v1.RunWorkflowFileRequest
+ */
+export type RunWorkflowFileRequest = Message<"easylab.v1.RunWorkflowFileRequest"> & {
+    /**
+     * @generated from field: string org = 1;
+     */
+    org: string;
+    /**
+     * @generated from field: string repo = 2;
+     */
+    repo: string;
+    /**
+     * @generated from field: string branch = 3;
+     */
+    branch: string;
+    /**
+     * '' = run every workflow in the file
+     *
+     * @generated from field: string name = 4;
+     */
+    name: string;
+    /**
+     * optional preset-arg overrides
+     *
+     * @generated from field: map<string, string> args = 5;
+     */
+    args: {
+        [key: string]: string;
+    };
+};
+/**
+ * Describes the message easylab.v1.RunWorkflowFileRequest.
+ * Use `create(RunWorkflowFileRequestSchema)` to create a new message.
+ */
+export declare const RunWorkflowFileRequestSchema: GenMessage<RunWorkflowFileRequest>;
+/**
+ * @generated from message easylab.v1.RunWorkflowFileResponse
+ */
+export type RunWorkflowFileResponse = Message<"easylab.v1.RunWorkflowFileResponse"> & {
+    /**
+     * one pending/running run per matched workflow
+     *
+     * @generated from field: repeated easylab.v1.Run runs = 1;
+     */
+    runs: Run[];
+    /**
+     * requested/unknown names not found
+     *
+     * @generated from field: repeated string skipped = 2;
+     */
+    skipped: string[];
+    /**
+     * @generated from field: string error = 3;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.RunWorkflowFileResponse.
+ * Use `create(RunWorkflowFileResponseSchema)` to create a new message.
+ */
+export declare const RunWorkflowFileResponseSchema: GenMessage<RunWorkflowFileResponse>;
+/**
+ * User is both the identity and the ownership boundary: a user owns
+ * namespaces (and therefore repositories), holds tokens, and is bound to its
+ * own abcp-agent tenant. Username is globally unique.
+ *
+ * @generated from message easylab.v1.User
+ */
+export type User = Message<"easylab.v1.User"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string username = 2;
+     */
+    username: string;
+    /**
+     * @generated from field: string display_name = 3;
+     */
+    displayName: string;
+    /**
+     * @generated from field: bool disabled = 4;
+     */
+    disabled: boolean;
+    /**
+     * @generated from field: string created_at = 5;
+     */
+    createdAt: string;
+    /**
+     * The bound abcp-agent tenant id (usually == username).
+     *
+     * @generated from field: string agent_tenant = 6;
+     */
+    agentTenant: string;
+};
+/**
+ * Describes the message easylab.v1.User.
+ * Use `create(UserSchema)` to create a new message.
+ */
+export declare const UserSchema: GenMessage<User>;
+/**
+ * @generated from message easylab.v1.CreateUserRequest
+ */
+export type CreateUserRequest = Message<"easylab.v1.CreateUserRequest"> & {
+    /**
+     * @generated from field: string username = 1;
+     */
+    username: string;
+    /**
+     * @generated from field: string display_name = 2;
+     */
+    displayName: string;
+    /**
+     * When true, also provision the matching abcp-agent tenant (AdminService)
+     * and bind its bootstrap token to the user.
+     *
+     * @generated from field: bool provision_agent_tenant = 3;
+     */
+    provisionAgentTenant: boolean;
+};
+/**
+ * Describes the message easylab.v1.CreateUserRequest.
+ * Use `create(CreateUserRequestSchema)` to create a new message.
+ */
+export declare const CreateUserRequestSchema: GenMessage<CreateUserRequest>;
+/**
+ * @generated from message easylab.v1.CreateUserResponse
+ */
+export type CreateUserResponse = Message<"easylab.v1.CreateUserResponse"> & {
+    /**
+     * @generated from field: easylab.v1.User user = 1;
+     */
+    user?: User | undefined;
+    /**
+     * One-time plaintext write token of the new user.
+     *
+     * @generated from field: string token = 2;
+     */
+    token: string;
+};
+/**
+ * Describes the message easylab.v1.CreateUserResponse.
+ * Use `create(CreateUserResponseSchema)` to create a new message.
+ */
+export declare const CreateUserResponseSchema: GenMessage<CreateUserResponse>;
+/**
+ * @generated from message easylab.v1.GetUserRequest
+ */
+export type GetUserRequest = Message<"easylab.v1.GetUserRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+};
+/**
+ * Describes the message easylab.v1.GetUserRequest.
+ * Use `create(GetUserRequestSchema)` to create a new message.
+ */
+export declare const GetUserRequestSchema: GenMessage<GetUserRequest>;
+/**
+ * @generated from message easylab.v1.GetUserResponse
+ */
+export type GetUserResponse = Message<"easylab.v1.GetUserResponse"> & {
+    /**
+     * @generated from field: easylab.v1.User user = 1;
+     */
+    user?: User | undefined;
+};
+/**
+ * Describes the message easylab.v1.GetUserResponse.
+ * Use `create(GetUserResponseSchema)` to create a new message.
+ */
+export declare const GetUserResponseSchema: GenMessage<GetUserResponse>;
+/**
+ * @generated from message easylab.v1.ListUsersRequest
+ */
+export type ListUsersRequest = Message<"easylab.v1.ListUsersRequest"> & {};
+/**
+ * Describes the message easylab.v1.ListUsersRequest.
+ * Use `create(ListUsersRequestSchema)` to create a new message.
+ */
+export declare const ListUsersRequestSchema: GenMessage<ListUsersRequest>;
+/**
+ * @generated from message easylab.v1.ListUsersResponse
+ */
+export type ListUsersResponse = Message<"easylab.v1.ListUsersResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.User users = 1;
+     */
+    users: User[];
+};
+/**
+ * Describes the message easylab.v1.ListUsersResponse.
+ * Use `create(ListUsersResponseSchema)` to create a new message.
+ */
+export declare const ListUsersResponseSchema: GenMessage<ListUsersResponse>;
+/**
+ * @generated from message easylab.v1.UpdateUserRequest
+ */
+export type UpdateUserRequest = Message<"easylab.v1.UpdateUserRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: optional string display_name = 2;
+     */
+    displayName?: string | undefined;
+    /**
+     * @generated from field: optional bool disabled = 3;
+     */
+    disabled?: boolean | undefined;
+};
+/**
+ * Describes the message easylab.v1.UpdateUserRequest.
+ * Use `create(UpdateUserRequestSchema)` to create a new message.
+ */
+export declare const UpdateUserRequestSchema: GenMessage<UpdateUserRequest>;
+/**
+ * @generated from message easylab.v1.UpdateUserResponse
+ */
+export type UpdateUserResponse = Message<"easylab.v1.UpdateUserResponse"> & {
+    /**
+     * @generated from field: easylab.v1.User user = 1;
+     */
+    user?: User | undefined;
+};
+/**
+ * Describes the message easylab.v1.UpdateUserResponse.
+ * Use `create(UpdateUserResponseSchema)` to create a new message.
+ */
+export declare const UpdateUserResponseSchema: GenMessage<UpdateUserResponse>;
+/**
+ * @generated from message easylab.v1.DeleteUserRequest
+ */
+export type DeleteUserRequest = Message<"easylab.v1.DeleteUserRequest"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteUserRequest.
+ * Use `create(DeleteUserRequestSchema)` to create a new message.
+ */
+export declare const DeleteUserRequestSchema: GenMessage<DeleteUserRequest>;
+/**
+ * @generated from message easylab.v1.DeleteUserResponse
+ */
+export type DeleteUserResponse = Message<"easylab.v1.DeleteUserResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * true when the bound abcp-agent tenant was also deleted.
+     *
+     * @generated from field: bool agent_deleted = 2;
+     */
+    agentDeleted: boolean;
+    /**
+     * @generated from field: string error = 3;
+     */
+    error: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteUserResponse.
+ * Use `create(DeleteUserResponseSchema)` to create a new message.
+ */
+export declare const DeleteUserResponseSchema: GenMessage<DeleteUserResponse>;
+/**
+ * @generated from message easylab.v1.UserToken
+ */
+export type UserToken = Message<"easylab.v1.UserToken"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string username = 2;
+     */
+    username: string;
+    /**
+     * @generated from field: string created_at = 3;
+     */
+    createdAt: string;
+};
+/**
+ * Describes the message easylab.v1.UserToken.
+ * Use `create(UserTokenSchema)` to create a new message.
+ */
+export declare const UserTokenSchema: GenMessage<UserToken>;
+/**
+ * @generated from message easylab.v1.ListUserTokensRequest
+ */
+export type ListUserTokensRequest = Message<"easylab.v1.ListUserTokensRequest"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+};
+/**
+ * Describes the message easylab.v1.ListUserTokensRequest.
+ * Use `create(ListUserTokensRequestSchema)` to create a new message.
+ */
+export declare const ListUserTokensRequestSchema: GenMessage<ListUserTokensRequest>;
+/**
+ * @generated from message easylab.v1.ListUserTokensResponse
+ */
+export type ListUserTokensResponse = Message<"easylab.v1.ListUserTokensResponse"> & {
+    /**
+     * @generated from field: repeated easylab.v1.UserToken tokens = 1;
+     */
+    tokens: UserToken[];
+};
+/**
+ * Describes the message easylab.v1.ListUserTokensResponse.
+ * Use `create(ListUserTokensResponseSchema)` to create a new message.
+ */
+export declare const ListUserTokensResponseSchema: GenMessage<ListUserTokensResponse>;
+/**
+ * @generated from message easylab.v1.CreateUserTokenRequest
+ */
+export type CreateUserTokenRequest = Message<"easylab.v1.CreateUserTokenRequest"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+    /**
+     * Optional client-chosen token; empty mints a random one.
+     *
+     * @generated from field: string token = 2;
+     */
+    token: string;
+};
+/**
+ * Describes the message easylab.v1.CreateUserTokenRequest.
+ * Use `create(CreateUserTokenRequestSchema)` to create a new message.
+ */
+export declare const CreateUserTokenRequestSchema: GenMessage<CreateUserTokenRequest>;
+/**
+ * @generated from message easylab.v1.CreateUserTokenResponse
+ */
+export type CreateUserTokenResponse = Message<"easylab.v1.CreateUserTokenResponse"> & {
+    /**
+     * @generated from field: string token = 1;
+     */
+    token: string;
+};
+/**
+ * Describes the message easylab.v1.CreateUserTokenResponse.
+ * Use `create(CreateUserTokenResponseSchema)` to create a new message.
+ */
+export declare const CreateUserTokenResponseSchema: GenMessage<CreateUserTokenResponse>;
+/**
+ * @generated from message easylab.v1.DeleteUserTokenRequest
+ */
+export type DeleteUserTokenRequest = Message<"easylab.v1.DeleteUserTokenRequest"> & {
+    /**
+     * @generated from field: string token = 1;
+     */
+    token: string;
+};
+/**
+ * Describes the message easylab.v1.DeleteUserTokenRequest.
+ * Use `create(DeleteUserTokenRequestSchema)` to create a new message.
+ */
+export declare const DeleteUserTokenRequestSchema: GenMessage<DeleteUserTokenRequest>;
+/**
+ * @generated from message easylab.v1.DeleteUserTokenResponse
+ */
+export type DeleteUserTokenResponse = Message<"easylab.v1.DeleteUserTokenResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+};
+/**
+ * Describes the message easylab.v1.DeleteUserTokenResponse.
+ * Use `create(DeleteUserTokenResponseSchema)` to create a new message.
+ */
+export declare const DeleteUserTokenResponseSchema: GenMessage<DeleteUserTokenResponse>;
+/**
  * @generated from enum easylab.v1.ServiceKind
  */
 export declare enum ServiceKind {
@@ -4210,6 +6035,202 @@ export declare const LabService: GenService<{
         input: typeof SyncMirrorRequestSchema;
         output: typeof SyncMirrorResponseSchema;
     };
+    /**
+     * ---- repo metadata / refs / members (REST removal) ----
+     *
+     * @generated from rpc easylab.v1.LabService.UpdateRepo
+     */
+    updateRepo: {
+        methodKind: "unary";
+        input: typeof UpdateRepoRequestSchema;
+        output: typeof UpdateRepoResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.SetTag
+     */
+    setTag: {
+        methodKind: "unary";
+        input: typeof SetTagRequestSchema;
+        output: typeof SetTagResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.DeleteTag
+     */
+    deleteTag: {
+        methodKind: "unary";
+        input: typeof DeleteTagRequestSchema;
+        output: typeof DeleteTagResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.WriteFiles
+     */
+    writeFiles: {
+        methodKind: "unary";
+        input: typeof WriteFilesRequestSchema;
+        output: typeof WriteFilesResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.Drop
+     */
+    drop: {
+        methodKind: "unary";
+        input: typeof DropRequestSchema;
+        output: typeof DropResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.Revert
+     */
+    revert: {
+        methodKind: "unary";
+        input: typeof RevertRequestSchema;
+        output: typeof RevertResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.Resolve
+     */
+    resolve: {
+        methodKind: "unary";
+        input: typeof ResolveRequestSchema;
+        output: typeof ResolveResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.Squash
+     */
+    squash: {
+        methodKind: "unary";
+        input: typeof SquashRequestSchema;
+        output: typeof SquashResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.RebaseMany
+     */
+    rebaseMany: {
+        methodKind: "unary";
+        input: typeof RebaseManyRequestSchema;
+        output: typeof RebaseManyResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.CreateRelease
+     */
+    createRelease: {
+        methodKind: "unary";
+        input: typeof CreateReleaseRequestSchema;
+        output: typeof CreateReleaseResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.DeleteRelease
+     */
+    deleteRelease: {
+        methodKind: "unary";
+        input: typeof DeleteReleaseRequestSchema;
+        output: typeof DeleteReleaseResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.UploadReleaseAsset
+     */
+    uploadReleaseAsset: {
+        methodKind: "unary";
+        input: typeof UploadReleaseAssetRequestSchema;
+        output: typeof UploadReleaseAssetResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.ListRepoMembers
+     */
+    listRepoMembers: {
+        methodKind: "unary";
+        input: typeof ListRepoMembersRequestSchema;
+        output: typeof ListRepoMembersResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.SetRepoMember
+     */
+    setRepoMember: {
+        methodKind: "unary";
+        input: typeof SetRepoMemberRequestSchema;
+        output: typeof SetRepoMemberResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.RemoveRepoMember
+     */
+    removeRepoMember: {
+        methodKind: "unary";
+        input: typeof RemoveRepoMemberRequestSchema;
+        output: typeof RemoveRepoMemberResponseSchema;
+    };
+    /**
+     * ---- merge requests (fork→upstream change requests) ----
+     *
+     * @generated from rpc easylab.v1.LabService.ListMergeRequests
+     */
+    listMergeRequests: {
+        methodKind: "unary";
+        input: typeof ListMergeRequestsRequestSchema;
+        output: typeof ListMergeRequestsResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.GetMergeRequest
+     */
+    getMergeRequest: {
+        methodKind: "unary";
+        input: typeof GetMergeRequestRequestSchema;
+        output: typeof GetMergeRequestResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.CreateMergeRequest
+     */
+    createMergeRequest: {
+        methodKind: "unary";
+        input: typeof CreateMergeRequestRequestSchema;
+        output: typeof CreateMergeRequestResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.UpdateMergeRequest
+     */
+    updateMergeRequest: {
+        methodKind: "unary";
+        input: typeof UpdateMergeRequestRequestSchema;
+        output: typeof UpdateMergeRequestResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.MergeMergeRequest
+     */
+    mergeMergeRequest: {
+        methodKind: "unary";
+        input: typeof MergeMergeRequestRequestSchema;
+        output: typeof MergeMergeRequestResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.ListReviews
+     */
+    listReviews: {
+        methodKind: "unary";
+        input: typeof ListReviewsRequestSchema;
+        output: typeof ListReviewsResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.AddReview
+     */
+    addReview: {
+        methodKind: "unary";
+        input: typeof AddReviewRequestSchema;
+        output: typeof AddReviewResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.ListComments
+     */
+    listComments: {
+        methodKind: "unary";
+        input: typeof ListCommentsRequestSchema;
+        output: typeof ListCommentsResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.LabService.AddComment
+     */
+    addComment: {
+        methodKind: "unary";
+        input: typeof AddCommentRequestSchema;
+        output: typeof AddCommentResponseSchema;
+    };
 }>;
 /**
  * OpsService covers the dev/deploy surface (services, sandboxes, builds).
@@ -4306,30 +6327,6 @@ export declare const OpsService: GenService<{
         output: typeof SandboxJobKillResponseSchema;
     };
     /**
-     * @generated from rpc easylab.v1.OpsService.ListTasks
-     */
-    listTasks: {
-        methodKind: "unary";
-        input: typeof ListTasksRequestSchema;
-        output: typeof ListTasksResponseSchema;
-    };
-    /**
-     * @generated from rpc easylab.v1.OpsService.GetTask
-     */
-    getTask: {
-        methodKind: "unary";
-        input: typeof GetTaskRequestSchema;
-        output: typeof GetTaskResponseSchema;
-    };
-    /**
-     * @generated from rpc easylab.v1.OpsService.TaskLog
-     */
-    taskLog: {
-        methodKind: "server_streaming";
-        input: typeof TaskLogRequestSchema;
-        output: typeof TaskLogResponseSchema;
-    };
-    /**
      * @generated from rpc easylab.v1.OpsService.Sync
      */
     sync: {
@@ -4399,6 +6396,17 @@ export declare const RegistryService: GenService<{
         methodKind: "unary";
         input: typeof OCICatalogRequestSchema;
         output: typeof OCICatalogResponseSchema;
+    };
+    /**
+     * SetPackageVisibility flips a package's visibility (public|private). Requires
+     * maintainer+ on the package's scope (mapped repository, else owning user).
+     *
+     * @generated from rpc easylab.v1.RegistryService.SetPackageVisibility
+     */
+    setPackageVisibility: {
+        methodKind: "unary";
+        input: typeof SetPackageVisibilityRequestSchema;
+        output: typeof SetPackageVisibilityResponseSchema;
     };
 }>;
 /**
@@ -4543,6 +6551,44 @@ export declare const SandboxService: GenService<{
         input: typeof FileListRequestSchema;
         output: typeof FileListResponseSchema;
     };
+    /**
+     * RegisterExternalSandbox adopts an externally-run worker (not launched by
+     * easylab). It either claims the worker with its one-time enrollment code
+     * (exclusive; the worker then issues a bearer token), or accepts a token
+     * already provisioned on the worker. easylab persists the token + address so
+     * its worker passthroughs keep working across restarts.
+     *
+     * @generated from rpc easylab.v1.SandboxService.RegisterExternalSandbox
+     */
+    registerExternalSandbox: {
+        methodKind: "unary";
+        input: typeof RegisterExternalSandboxRequestSchema;
+        output: typeof RegisterExternalSandboxResponseSchema;
+    };
+    /**
+     * ListExternalSandboxes returns the externally-registered workers (mode =
+     * external), including address and owner — managed sandboxes are excluded.
+     *
+     * @generated from rpc easylab.v1.SandboxService.ListExternalSandboxes
+     */
+    listExternalSandboxes: {
+        methodKind: "unary";
+        input: typeof ListExternalSandboxesRequestSchema;
+        output: typeof ListExternalSandboxesResponseSchema;
+    };
+    /**
+     * ReleaseExternalSandbox revokes easylab's token on the worker and returns
+     * the worker to the claimable state with a fresh one-time code. After a
+     * release any caller presenting the new code may claim it. Managed sandboxes
+     * cannot be released.
+     *
+     * @generated from rpc easylab.v1.SandboxService.ReleaseExternalSandbox
+     */
+    releaseExternalSandbox: {
+        methodKind: "unary";
+        input: typeof ReleaseExternalSandboxRequestSchema;
+        output: typeof ReleaseExternalSandboxResponseSchema;
+    };
 }>;
 /**
  * @generated from service easylab.v1.WorkflowService
@@ -4627,5 +6673,90 @@ export declare const WorkflowService: GenService<{
         methodKind: "unary";
         input: typeof ListRunnersRequestSchema;
         output: typeof ListRunnersResponseSchema;
+    };
+    /**
+     * RunWorkflowFile loads .easylab/workflows.yaml from the branch tree and runs
+     * the named workflow (or all when name is empty). Asynchronous: returns the
+     * created runs (pending/running); poll GetRun / stream RunJobLog.
+     *
+     * @generated from rpc easylab.v1.WorkflowService.RunWorkflowFile
+     */
+    runWorkflowFile: {
+        methodKind: "unary";
+        input: typeof RunWorkflowFileRequestSchema;
+        output: typeof RunWorkflowFileResponseSchema;
+    };
+}>;
+/**
+ * UserService is the user administration surface. Create/Update/Delete and
+ * token minting require the admin credential (EASYLAB_ADMIN_TOKEN); reads
+ * require an authenticated caller.
+ *
+ * @generated from service easylab.v1.UserService
+ */
+export declare const UserService: GenService<{
+    /**
+     * @generated from rpc easylab.v1.UserService.CreateUser
+     */
+    createUser: {
+        methodKind: "unary";
+        input: typeof CreateUserRequestSchema;
+        output: typeof CreateUserResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.UserService.GetUser
+     */
+    getUser: {
+        methodKind: "unary";
+        input: typeof GetUserRequestSchema;
+        output: typeof GetUserResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.UserService.ListUsers
+     */
+    listUsers: {
+        methodKind: "unary";
+        input: typeof ListUsersRequestSchema;
+        output: typeof ListUsersResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.UserService.UpdateUser
+     */
+    updateUser: {
+        methodKind: "unary";
+        input: typeof UpdateUserRequestSchema;
+        output: typeof UpdateUserResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.UserService.DeleteUser
+     */
+    deleteUser: {
+        methodKind: "unary";
+        input: typeof DeleteUserRequestSchema;
+        output: typeof DeleteUserResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.UserService.ListUserTokens
+     */
+    listUserTokens: {
+        methodKind: "unary";
+        input: typeof ListUserTokensRequestSchema;
+        output: typeof ListUserTokensResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.UserService.CreateUserToken
+     */
+    createUserToken: {
+        methodKind: "unary";
+        input: typeof CreateUserTokenRequestSchema;
+        output: typeof CreateUserTokenResponseSchema;
+    };
+    /**
+     * @generated from rpc easylab.v1.UserService.DeleteUserToken
+     */
+    deleteUserToken: {
+        methodKind: "unary";
+        input: typeof DeleteUserTokenRequestSchema;
+        output: typeof DeleteUserTokenResponseSchema;
     };
 }>;

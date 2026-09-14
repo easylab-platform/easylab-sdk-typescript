@@ -476,6 +476,9 @@ export declare const PromptResponseSchema: GenMessage<PromptResponse>;
 /**
  * WatchSession streams live session events (the Connect replacement for the
  * SSE /stream endpoint): turn deltas, tool calls, errors and completions.
+ * `since` is a message id ANCHOR for incremental replay: when set, a replay
+ * starts AFTER that message (so a client that was offline still catches the
+ * turns that completed meanwhile). Empty = live-from-now (or the active run).
  *
  * @generated from message agent.v1.WatchSessionRequest
  */
@@ -484,6 +487,10 @@ export type WatchSessionRequest = Message$1<"agent.v1.WatchSessionRequest"> & {
      * @generated from field: string id = 1;
      */
     id: string;
+    /**
+     * @generated from field: string since = 2;
+     */
+    since: string;
 };
 /**
  * Describes the message agent.v1.WatchSessionRequest.
@@ -722,6 +729,19 @@ export type DeleteSessionResponse = Message$1<"agent.v1.DeleteSessionResponse"> 
  */
 export declare const DeleteSessionResponseSchema: GenMessage<DeleteSessionResponse>;
 /**
+ * ListMessages reads a session's message chain. Two modes:
+ *   * ANCHORED / incremental: `after` is a message id ANCHOR (a pin) the
+ *     client already has. The response is the chain segment AFTER it, i.e. the
+ *     walk from the current tip back to (excluding) that anchor — the messages
+ *     appended since the client last synced. If the anchor is NOT on the
+ *     current chain (it was withdrawn via undo, or the chain was forked), the
+ *     response sets `resync=true` and the client must drop its cache and
+ *     re-fetch. `tip_id` always echoes the current tip so the client can store
+ *     it as the next anchor.
+ *   * BACKWARD paging (existing): with `before` set (and `after` empty) the
+ *     chain is read oldest→newest for `limit` messages BEFORE that cursor;
+ *     with neither set, the newest `limit` messages.
+ *
  * @generated from message agent.v1.ListMessagesRequest
  */
 export type ListMessagesRequest = Message$1<"agent.v1.ListMessagesRequest"> & {
@@ -734,9 +754,18 @@ export type ListMessagesRequest = Message$1<"agent.v1.ListMessagesRequest"> & {
      */
     limit: number;
     /**
+     * Backward-paging cursor (exclusive): return messages before this id.
+     *
      * @generated from field: string before = 3;
      */
     before: string;
+    /**
+     * Incremental anchor (exclusive): return messages after this id. When the
+     * anchor is absent from the current chain, the server signals `resync`.
+     *
+     * @generated from field: string after = 4;
+     */
+    after: string;
 };
 /**
  * Describes the message agent.v1.ListMessagesRequest.
@@ -755,6 +784,19 @@ export type ListMessagesResponse = Message$1<"agent.v1.ListMessagesResponse"> & 
      * @generated from field: repeated agent.v1.Message messages = 2;
      */
     messages: Message[];
+    /**
+     * The anchor was not on the current chain (withdrawn/forked): the client
+     * must discard its local copy of this session and re-fetch from scratch.
+     *
+     * @generated from field: bool resync = 3;
+     */
+    resync: boolean;
+    /**
+     * Current chain tip id (store as the next `after` anchor).
+     *
+     * @generated from field: string tip_id = 4;
+     */
+    tipId: string;
 };
 /**
  * Describes the message agent.v1.ListMessagesResponse.
