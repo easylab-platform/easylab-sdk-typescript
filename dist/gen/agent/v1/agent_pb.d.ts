@@ -317,9 +317,14 @@ export declare const ProviderSchema: GenMessage<Provider>;
  * carry only text models: `context_limit` (> 0) is REQUIRED and drives
  * compaction budgets. The single `vercel-compatible-gateway` provider is a
  * SUPERSET — it may carry text models (context_limit > 0) AND multimodal
- * models used by tools (image/video/speech/transcription, context_limit 0);
- * which capability a multimodal model serves is implied by the tool's config
- * knob (image_model / video_model / tts_model / asr_model), not stored here.
+ * models used by tools (image/video/speech/transcription, context_limit 0).
+ *
+ * `model_type` is the model's KIND as advertised by the gateway `/config`
+ * (`language` / `image` / `video` / `speech` / `transcription` / `embedding` /
+ * `reranking` / `realtime`), normalized to a short tag (`text` for language).
+ * It is DISPLAY/classification metadata only: which tool serves a given
+ * multimodal model is still implied by the tool's config knob
+ * (image_model / video_model / tts_model / asr_model). Empty when unknown.
  *
  * @generated from message agent.v1.ProviderModel
  */
@@ -336,6 +341,14 @@ export type ProviderModel = Message$1<"agent.v1.ProviderModel"> & {
      * @generated from field: int64 context_limit = 3;
      */
     contextLimit: bigint;
+    /**
+     * Display-only kind: text | image | video | speech | transcription |
+     * embedding | reranking | realtime (normalized from the gateway /config
+     * modelType). Empty for a plain text provider or an unknown kind.
+     *
+     * @generated from field: string model_type = 4;
+     */
+    modelType: string;
 };
 /**
  * Describes the message agent.v1.ProviderModel.
@@ -1200,6 +1213,67 @@ export type RegisterProviderResponse = Message$1<"agent.v1.RegisterProviderRespo
  */
 export declare const RegisterProviderResponseSchema: GenMessage<RegisterProviderResponse>;
 /**
+ * DiscoverGatewayModels asks a `vercel-compatible-gateway` for the models it
+ * serves (the gateway's `/config`) and classifies each by the advertised
+ * `modelType`: language models get a real context limit, all other kinds
+ * (image/video/speech/transcription/embedding/reranking) get 0. The gateway is
+ * the only provider that can answer this, so a non-gateway api_type is
+ * rejected.
+ *
+ * @generated from message agent.v1.DiscoverGatewayModelsRequest
+ */
+export type DiscoverGatewayModelsRequest = Message$1<"agent.v1.DiscoverGatewayModelsRequest"> & {
+    /**
+     * @generated from field: string provider_id = 1;
+     */
+    providerId: string;
+    /**
+     * @generated from field: string api_type = 2;
+     */
+    apiType: string;
+    /**
+     * @generated from field: string base_url = 3;
+     */
+    baseUrl: string;
+    /**
+     * @generated from field: string api_key = 4;
+     */
+    apiKey: string;
+    /**
+     * @generated from field: map<string, string> headers = 5;
+     */
+    headers: {
+        [key: string]: string;
+    };
+};
+/**
+ * Describes the message agent.v1.DiscoverGatewayModelsRequest.
+ * Use `create(DiscoverGatewayModelsRequestSchema)` to create a new message.
+ */
+export declare const DiscoverGatewayModelsRequestSchema: GenMessage<DiscoverGatewayModelsRequest>;
+/**
+ * @generated from message agent.v1.DiscoverGatewayModelsResponse
+ */
+export type DiscoverGatewayModelsResponse = Message$1<"agent.v1.DiscoverGatewayModelsResponse"> & {
+    /**
+     * @generated from field: bool ok = 1;
+     */
+    ok: boolean;
+    /**
+     * @generated from field: string error = 2;
+     */
+    error: string;
+    /**
+     * @generated from field: repeated agent.v1.ProviderModel models = 3;
+     */
+    models: ProviderModel[];
+};
+/**
+ * Describes the message agent.v1.DiscoverGatewayModelsResponse.
+ * Use `create(DiscoverGatewayModelsResponseSchema)` to create a new message.
+ */
+export declare const DiscoverGatewayModelsResponseSchema: GenMessage<DiscoverGatewayModelsResponse>;
+/**
  * @generated from message agent.v1.DeleteProviderRequest
  */
 export type DeleteProviderRequest = Message$1<"agent.v1.DeleteProviderRequest"> & {
@@ -2052,6 +2126,14 @@ export declare const AgentService: GenService<{
         methodKind: "unary";
         input: typeof RegisterProviderRequestSchema;
         output: typeof RegisterProviderResponseSchema;
+    };
+    /**
+     * @generated from rpc agent.v1.AgentService.DiscoverGatewayModels
+     */
+    discoverGatewayModels: {
+        methodKind: "unary";
+        input: typeof DiscoverGatewayModelsRequestSchema;
+        output: typeof DiscoverGatewayModelsResponseSchema;
     };
     /**
      * @generated from rpc agent.v1.AgentService.DeleteProvider
