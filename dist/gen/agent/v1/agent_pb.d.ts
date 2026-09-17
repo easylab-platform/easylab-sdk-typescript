@@ -280,7 +280,10 @@ export type Preset = Message$1<"agent.v1.Preset"> & {
  */
 export declare const PresetSchema: GenMessage<Preset>;
 /**
- * Provider row.
+ * Provider row. A provider serves EXACTLY ONE modality (`capability`): its
+ * models all share that capability. A host that serves several modalities is
+ * registered once per modality (semantic grouping), so a modality's model
+ * picker is simply "the models of that modality's providers".
  *
  * @generated from message agent.v1.Provider
  */
@@ -315,6 +318,13 @@ export type Provider = Message$1<"agent.v1.Provider"> & {
      * @generated from field: string updated_at = 7;
      */
     updatedAt: string;
+    /**
+     * The single modality this provider serves (text | image | video | speech |
+     * transcription | embedding | rerank | realtime). New field (no renumber).
+     *
+     * @generated from field: string capability = 8;
+     */
+    capability: string;
 };
 /**
  * Describes the message agent.v1.Provider.
@@ -322,18 +332,16 @@ export type Provider = Message$1<"agent.v1.Provider"> & {
  */
 export declare const ProviderSchema: GenMessage<Provider>;
 /**
- * Provider model entry. Text providers (api_type != vercel-compatible-gateway)
- * carry only text models: `context_limit` (> 0) is REQUIRED and drives
- * compaction budgets. The single `vercel-compatible-gateway` provider is a
- * SUPERSET — it may carry text models (context_limit > 0) AND multimodal
- * models used by tools (image/video/speech/transcription, context_limit 0).
+ * Provider model entry. All of a provider's models share the provider's
+ * `capability`; `model_type` mirrors it (kept for wire compatibility and for
+ * clients that read the model directly).
  *
- * `model_type` is the model's KIND as advertised by the gateway `/config`
- * (`language` / `image` / `video` / `speech` / `transcription` / `embedding` /
- * `reranking` / `realtime`), normalized to a short tag (`text` for language).
- * It is DISPLAY/classification metadata only: which tool serves a given
- * multimodal model is still implied by the tool's config knob
- * (image_model / video_model / tts_model / asr_model). Empty when unknown.
+ *   - text      -> context_limit (> 0) REQUIRED (drives compaction budgets)
+ *   - non-text  -> context_limit MUST be 0 (not a chat model)
+ *
+ * A provider protocol may serve any modality its wire format supports
+ * (validated server-side against the capability matrix — see
+ * ListProvidersCatalog). There is no gateway special-casing.
  *
  * @generated from message agent.v1.ProviderModel
  */
@@ -351,9 +359,7 @@ export type ProviderModel = Message$1<"agent.v1.ProviderModel"> & {
      */
     contextLimit: bigint;
     /**
-     * Display-only kind: text | image | video | speech | transcription |
-     * embedding | reranking | realtime (normalized from the gateway /config
-     * modelType). Empty for a plain text provider or an unknown kind.
+     * The model's modality, identical to its provider's `capability`.
      *
      * @generated from field: string model_type = 4;
      */
@@ -430,6 +436,22 @@ export type ToolConfigField = Message$1<"agent.v1.ToolConfigField"> & {
      * @generated from field: string scope = 8;
      */
     scope: string;
+    /**
+     * Semantic kind: "value" (default, an ordinary knob) or "model" (the value
+     * is a `provider_id/model_id` reference; the client renders a picker scoped
+     * to `capability` against the provider registry instead of a text field).
+     *
+     * @generated from field: string kind = 9;
+     */
+    kind: string;
+    /**
+     * Required when `kind == "model"`: the modality the reference must match
+     * (text | image | video | speech | transcription | embedding | rerank |
+     * realtime).
+     *
+     * @generated from field: string capability = 10;
+     */
+    capability: string;
 };
 /**
  * Describes the message agent.v1.ToolConfigField.
@@ -1198,14 +1220,21 @@ export type ListProvidersCatalogRequest = Message$1<"agent.v1.ListProvidersCatal
  */
 export declare const ListProvidersCatalogRequestSchema: GenMessage<ListProvidersCatalogRequest>;
 /**
+ * The registration catalog: every provider api type the server accepts and
+ * the model capabilities each can serve. Single source of truth for client
+ * registration forms — clients fetch this instead of hardcoding the matrix
+ * (with a bundled fallback copy for offline use).
+ *
  * @generated from message agent.v1.ListProvidersCatalogResponse
  */
 export type ListProvidersCatalogResponse = Message$1<"agent.v1.ListProvidersCatalogResponse"> & {
     /**
-     * @generated from field: map<string, agent.v1.CatalogProvider> providers = 1;
+     * api type id (e.g. "openai-compatible") -> its catalog entry.
+     *
+     * @generated from field: map<string, agent.v1.ApiTypeCatalog> api_types = 1;
      */
-    providers: {
-        [key: string]: CatalogProvider;
+    apiTypes: {
+        [key: string]: ApiTypeCatalog;
     };
 };
 /**
@@ -1214,41 +1243,24 @@ export type ListProvidersCatalogResponse = Message$1<"agent.v1.ListProvidersCata
  */
 export declare const ListProvidersCatalogResponseSchema: GenMessage<ListProvidersCatalogResponse>;
 /**
- * @generated from message agent.v1.CatalogProvider
+ * Catalog entry for one provider api type.
+ *
+ * @generated from message agent.v1.ApiTypeCatalog
  */
-export type CatalogProvider = Message$1<"agent.v1.CatalogProvider"> & {
+export type ApiTypeCatalog = Message$1<"agent.v1.ApiTypeCatalog"> & {
     /**
-     * @generated from field: string id = 1;
+     * Capability tags a model of this api type may declare in `model_type`
+     * (text | image | video | speech | transcription | embedding | rerank).
+     *
+     * @generated from field: repeated string capabilities = 1;
      */
-    id: string;
-    /**
-     * @generated from field: string name = 2;
-     */
-    name: string;
-    /**
-     * @generated from field: string api = 3;
-     */
-    api: string;
-    /**
-     * @generated from field: string npm = 4;
-     */
-    npm: string;
-    /**
-     * @generated from field: repeated string env = 5;
-     */
-    env: string[];
-    /**
-     * @generated from field: map<string, google.protobuf.Value> models = 6;
-     */
-    models: {
-        [key: string]: Value;
-    };
+    capabilities: string[];
 };
 /**
- * Describes the message agent.v1.CatalogProvider.
- * Use `create(CatalogProviderSchema)` to create a new message.
+ * Describes the message agent.v1.ApiTypeCatalog.
+ * Use `create(ApiTypeCatalogSchema)` to create a new message.
  */
-export declare const CatalogProviderSchema: GenMessage<CatalogProvider>;
+export declare const ApiTypeCatalogSchema: GenMessage<ApiTypeCatalog>;
 /**
  * @generated from message agent.v1.RegisterProviderRequest
  */
@@ -1277,67 +1289,6 @@ export type RegisterProviderResponse = Message$1<"agent.v1.RegisterProviderRespo
  * Use `create(RegisterProviderResponseSchema)` to create a new message.
  */
 export declare const RegisterProviderResponseSchema: GenMessage<RegisterProviderResponse>;
-/**
- * DiscoverGatewayModels asks a `vercel-compatible-gateway` for the models it
- * serves (the gateway's `/config`) and classifies each by the advertised
- * `modelType`: language models get a real context limit, all other kinds
- * (image/video/speech/transcription/embedding/reranking) get 0. The gateway is
- * the only provider that can answer this, so a non-gateway api_type is
- * rejected.
- *
- * @generated from message agent.v1.DiscoverGatewayModelsRequest
- */
-export type DiscoverGatewayModelsRequest = Message$1<"agent.v1.DiscoverGatewayModelsRequest"> & {
-    /**
-     * @generated from field: string provider_id = 1;
-     */
-    providerId: string;
-    /**
-     * @generated from field: string api_type = 2;
-     */
-    apiType: string;
-    /**
-     * @generated from field: string base_url = 3;
-     */
-    baseUrl: string;
-    /**
-     * @generated from field: string api_key = 4;
-     */
-    apiKey: string;
-    /**
-     * @generated from field: map<string, string> headers = 5;
-     */
-    headers: {
-        [key: string]: string;
-    };
-};
-/**
- * Describes the message agent.v1.DiscoverGatewayModelsRequest.
- * Use `create(DiscoverGatewayModelsRequestSchema)` to create a new message.
- */
-export declare const DiscoverGatewayModelsRequestSchema: GenMessage<DiscoverGatewayModelsRequest>;
-/**
- * @generated from message agent.v1.DiscoverGatewayModelsResponse
- */
-export type DiscoverGatewayModelsResponse = Message$1<"agent.v1.DiscoverGatewayModelsResponse"> & {
-    /**
-     * @generated from field: bool ok = 1;
-     */
-    ok: boolean;
-    /**
-     * @generated from field: string error = 2;
-     */
-    error: string;
-    /**
-     * @generated from field: repeated agent.v1.ProviderModel models = 3;
-     */
-    models: ProviderModel[];
-};
-/**
- * Describes the message agent.v1.DiscoverGatewayModelsResponse.
- * Use `create(DiscoverGatewayModelsResponseSchema)` to create a new message.
- */
-export declare const DiscoverGatewayModelsResponseSchema: GenMessage<DiscoverGatewayModelsResponse>;
 /**
  * @generated from message agent.v1.DeleteProviderRequest
  */
@@ -2519,14 +2470,6 @@ export declare const AgentService: GenService<{
         methodKind: "unary";
         input: typeof RegisterProviderRequestSchema;
         output: typeof RegisterProviderResponseSchema;
-    };
-    /**
-     * @generated from rpc agent.v1.AgentService.DiscoverGatewayModels
-     */
-    discoverGatewayModels: {
-        methodKind: "unary";
-        input: typeof DiscoverGatewayModelsRequestSchema;
-        output: typeof DiscoverGatewayModelsResponseSchema;
     };
     /**
      * @generated from rpc agent.v1.AgentService.DeleteProvider
